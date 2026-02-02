@@ -1,17 +1,12 @@
-import { Router } from '../zhin-core/Router.js';
-import { Home } from './pages/Home.js';
-import { About } from './pages/About.js';
+import LandingPage from './pages/index.js';
 
-// Define the application routes
+// Simple Client-Side Entry
 const routes = {
-  '/': Home,
-  '/about': About,
-  '404': Home // Fallback to Home for now, or create a NotFound component
+    '/': LandingPage
 };
 
-// Initialize the Router on the #app element
-const rootElement = document.getElementById('app');
-const router = new Router(routes, rootElement);
+const path = window.location.pathname;
+const Component = routes[path] || LandingPage;
 
-// Expose router to window for debugging (optional)
-window.router = router;
+const app = new Component();
+app.mount(document.getElementById('app'));

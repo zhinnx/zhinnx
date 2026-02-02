@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Container -->
+  <rect width="512" height="512" rx="128" fill="url(#grad1)"/>
+
+  <!-- The Z Shape -->
+  <path d="M170 360H350V300L240 170H340V110H160V170L270 300H170V360Z" fill="white"/>
+
+  <!-- Sleep Bubbles (Small Zs) decoration -->
+  <path d="M370 140L390 140L370 160L390 160" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <path d="M400 100L430 100L400 130L430 130" stroke="white" stroke-width="8" stroke-linecap="round"/>
+
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1"/> <!-- Indigo -->
+      <stop offset="100%" stop-color="#A855F7"/> <!-- Purple -->
+    </linearGradient>
+  </defs>
+</svg>
