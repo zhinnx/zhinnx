@@ -183,6 +183,7 @@ export default class LandingPage extends Component {
                                     <code class="font-mono text-gray-400 text-lg block mb-4">> cd my-app</code>
                                     <code class="font-mono text-gray-400 text-lg block">> node server.js</code>
                                 </div>
+                                <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
                             </div>
                             <div class="border-2 border-black bg-white p-8 comic-shadow h-full flex flex-col justify-center">
                                 <h3 class="text-2xl font-bold mb-4">Or add to existing project:</h3>

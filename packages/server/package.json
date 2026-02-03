@@ -7,9 +7,10 @@
   "exports": {
     ".": "./index.js"
   },
+
   "publishConfig": {
     "access": "public"
-  },
+
   "dependencies": {
     "zhinnx-core": "^2.0.0"
   },
