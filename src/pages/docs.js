@@ -136,7 +136,7 @@ export default class DocsPage extends Component {
                              <hr class="border-2 border-black my-12" />
 
                             <h2 id="components" class="text-4xl font-bold mb-6">Components</h2>
-                            <p class="mb-6">Components are the building blocks of zhinnx. They are standard ES6 classes that extend the base `Component` class.</p>
+                            <p class="mb-6">Components are the building blocks of zhinnx. They are standard ES6 classes that extend the base <code>Component</code> class.</p>
 
                             <div class="bg-gray-50 border-2 border-black p-6 mb-8 overflow-x-auto">
 <pre class="font-mono text-sm">
@@ -167,17 +167,17 @@ export class Counter extends Component {
 }
 </pre>
                             </div>
-                            <p class="mb-12">Notice that we use `html\`` tagged templates. This allows us to write standard HTML that is parsed efficiently by the browser (using `<template>`) and by the server (for SSR).</p>
+                            <p class="mb-12">Notice that we use <code>html\`</code> tagged templates. This allows us to write standard HTML that is parsed efficiently by the browser (using <code>&lt;template&gt;</code>) and by the server (for SSR).</p>
 
                             <hr class="border-2 border-black my-12" />
 
                             <h2 id="routing" class="text-4xl font-bold mb-6">Routing</h2>
                             <p class="mb-6">zhinnx uses a file-based routing system similar to Next.js. You don't need to configure a router manually.</p>
                             <ul class="list-disc pl-6 space-y-2 mb-12">
-                                <li>`src/pages/index.js` → `/`</li>
-                                <li>`src/pages/about.js` → `/about`</li>
-                                <li>`src/pages/blog/post.js` → `/blog/post`</li>
-                                <li>`src/pages/users/[id].js` → `/users/:id` (Dynamic Route)</li>
+                                <li><code>src/pages/index.js</code> → <code>/</code></li>
+                                <li><code>src/pages/about.js</code> → <code>/about</code></li>
+                                <li><code>src/pages/blog/post.js</code> → <code>/blog/post</code></li>
+                                <li><code>src/pages/users/[id].js</code> → <code>/users/:id</code> (Dynamic Route)</li>
                             </ul>
 
                              <hr class="border-2 border-black my-12" />
@@ -185,7 +185,7 @@ export class Counter extends Component {
                             <h2 id="ssr" class="text-4xl font-bold mb-6">SSR & Streaming</h2>
                             <p class="mb-6">Server-Side Rendering (SSR) is enabled by default. zhinnx takes this a step further with <strong>HTML Streaming</strong>.</p>
                             <p class="mb-6">When a request comes in, the server immediately sends the document head and starts streaming the body as it renders. This ensures the browser can start loading CSS, JS, and fonts immediately, resulting in superior performance metrics.</p>
-                            <p class="mb-12">This happens automatically in `server.js` via the `@zhinnx/server` package. No configuration is needed.</p>
+                            <p class="mb-12">This happens automatically in <code>server.js</code> via the <code>@zhinnx/server</code> package. No configuration is needed.</p>
 
                         </div>
                     </main>
