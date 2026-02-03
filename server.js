@@ -1,5 +1,5 @@
 import http from 'http';
-import { handleRequest, ROUTE_MAP } from './zhin-core/handler.js';
+import { handleRequest, ROUTE_MAP } from './packages/server/index.js';
 
 const PORT = 3000;
 

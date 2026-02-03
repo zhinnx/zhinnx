@@ -1,6 +1,5 @@
-
-// ZhinStack v2 Reactivity System
-// Inspired by Vue 3's Reactivity
+// Zhinnx v2 Reactivity System
+// Optimized with dependency cleanup and lazy computed properties
 
 let activeEffect = null;
 const targetMap = new WeakMap();
@@ -10,7 +9,7 @@ const targetMap = new WeakMap();
  * @param {Object} target
  * @param {string} key
  */
-function track(target, key) {
+export function track(target, key) {
     if (activeEffect) {
         let depsMap = targetMap.get(target);
         if (!depsMap) {
@@ -23,6 +22,7 @@ function track(target, key) {
             depsMap.set(key, dep);
         }
         dep.add(activeEffect);
+        activeEffect.deps.push(dep);
     }
 }
 
@@ -31,15 +31,19 @@ function track(target, key) {
  * @param {Object} target
  * @param {string} key
  */
-function trigger(target, key) {
+export function trigger(target, key) {
     const depsMap = targetMap.get(target);
     if (!depsMap) return;
     const dep = depsMap.get(key);
     if (dep) {
-        // Run effects
-        // We copy the set to avoid infinite loops if effects trigger themselves
         const effectsToRun = new Set(dep);
-        effectsToRun.forEach(eff => eff());
+        effectsToRun.forEach(eff => {
+            if (eff.scheduler) {
+                eff.scheduler();
+            } else {
+                eff();
+            }
+        });
     }
 }
 
@@ -65,22 +69,43 @@ export function reactive(target) {
     });
 }
 
+function cleanupEffect(effectFn) {
+    const { deps } = effectFn;
+    if (deps.length) {
+        for (let i = 0; i < deps.length; i++) {
+            deps[i].delete(effectFn);
+        }
+        deps.length = 0;
+    }
+}
+
 /**
  * Registers a side effect that runs when dependencies change.
- * @param {Function} eff
+ * @param {Function} fn - The function to run
+ * @param {Object} options - { lazy: boolean, scheduler: Function }
  */
-export function effect(eff) {
-    const wrappedEffect = () => {
+export function effect(fn, options = {}) {
+    const effectFn = () => {
+        // cleanup previous dependencies to avoid memory leaks and stale deps
+        cleanupEffect(effectFn);
+
         const previousEffect = activeEffect;
-        activeEffect = wrappedEffect;
+        activeEffect = effectFn;
         try {
-            eff();
+            return fn();
         } finally {
             activeEffect = previousEffect;
         }
     };
-    wrappedEffect();
-    return wrappedEffect; // Return runner if needed
+
+    effectFn.deps = [];
+    effectFn.scheduler = options.scheduler;
+
+    if (!options.lazy) {
+        effectFn();
+    }
+
+    return effectFn;
 }
 
 /**
@@ -89,9 +114,29 @@ export function effect(eff) {
  * @returns {Object} { value }
  */
 export function computed(getter) {
-    const result = { value: undefined };
-    effect(() => {
-        result.value = getter();
+    let value;
+    let dirty = true;
+
+    const effectFn = effect(getter, {
+        lazy: true,
+        scheduler: () => {
+            if (!dirty) {
+                dirty = true;
+                trigger(computedObj, 'value');
+            }
+        }
     });
-    return result; // Simple implementation for now
+
+    const computedObj = {
+        get value() {
+            if (dirty) {
+                value = effectFn();
+                dirty = false;
+            }
+            track(computedObj, 'value');
+            return value;
+        }
+    };
+
+    return computedObj;
 }
