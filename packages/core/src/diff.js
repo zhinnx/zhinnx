@@ -1,9 +1,17 @@
 
 /**
- * ZhinStack VDOM Diffing Engine
+ * Zhinnx VDOM Diffing Engine
+ * Optimized for Fragments and Arrays
  */
 
 export function mount(vnode, container, anchor = null) {
+    if (vnode === null || vnode === undefined || vnode === false) return;
+
+    if (Array.isArray(vnode)) {
+        vnode.forEach(child => mount(child, container, anchor));
+        return; // Fragments don't return a single EL
+    }
+
     const el = createDOM(vnode);
     vnode.el = el;
     container.insertBefore(el, anchor);
@@ -11,6 +19,13 @@ export function mount(vnode, container, anchor = null) {
 }
 
 export function unmount(vnode) {
+    if (vnode === null || vnode === undefined || vnode === false) return;
+
+    if (Array.isArray(vnode)) {
+        vnode.forEach(unmount);
+        return;
+    }
+
     if (vnode.el && vnode.el.parentNode) {
         vnode.el.parentNode.removeChild(vnode.el);
     }
@@ -34,33 +49,30 @@ function createDOM(vnode) {
 
 /**
  * Hydrates a VNode into an existing DOM Node.
- * Assumes the DOM structure matches the VNode structure (SSR).
  */
 export function hydrate(vnode, container) {
-    // If container is an element and we are hydrating children into it
-    // Usually hydrate is called on a root component with a container.
-    // We need to match vnode to container.firstChild.
-
-    // Simplification: We assume the container already has the content rendered by SSR.
-    // We walk the children.
-
     let domNode = container.firstChild;
 
-    // If vnode is an array (Fragment)
-    if (Array.isArray(vnode)) {
-         vnode.forEach(child => {
-             domNode = hydrateNode(child, domNode);
-         });
-    } else {
-         hydrateNode(vnode, domNode);
-    }
+    // Normalize vnode to array for consistent handling
+    const nodes = Array.isArray(vnode) ? vnode : [vnode];
+
+    nodes.forEach(child => {
+        domNode = hydrateNode(child, domNode);
+    });
 }
 
 function hydrateNode(vnode, domNode) {
+    if (vnode === null || vnode === undefined || vnode === false) return domNode;
+
+    if (Array.isArray(vnode)) {
+        vnode.forEach(child => {
+            domNode = hydrateNode(child, domNode);
+        });
+        return domNode;
+    }
+
     if (!domNode) {
-        // Mismatch: VNode exists but DOM doesn't. Mount it.
-        // This handles client-side only nodes or mismatches.
-        mount(vnode, domNode ? domNode.parentNode : null); // Parent unknown here if not passed
+        mount(vnode, domNode ? domNode.parentNode : null);
         return null;
     }
 
@@ -69,15 +81,13 @@ function hydrateNode(vnode, domNode) {
     // Text Node
     if (vnode.text !== undefined) {
         if (domNode.nodeType !== Node.TEXT_NODE) {
-            // Mismatch type
-            console.warn('Hydration Mismatch: Expected Text, found Element');
+            // console.warn('Hydration Mismatch: Expected Text, found Element');
             const newEl = createDOM(vnode);
             domNode.parentNode.replaceChild(newEl, domNode);
             vnode.el = newEl;
             return newEl.nextSibling;
         }
         if (domNode.nodeValue !== vnode.text) {
-             console.warn('Hydration Mismatch: Text content differs');
              domNode.nodeValue = vnode.text;
         }
         return domNode.nextSibling;
@@ -85,21 +95,19 @@ function hydrateNode(vnode, domNode) {
 
     // Element Node
     if (domNode.nodeType !== Node.ELEMENT_NODE || domNode.tagName.toLowerCase() !== vnode.tag.toLowerCase()) {
-         console.warn(`Hydration Mismatch: Expected <${vnode.tag}>, found <${domNode.tagName}>`);
+         // console.warn(`Hydration Mismatch: Expected <${vnode.tag}>, found <${domNode.tagName}>`);
          const newEl = createDOM(vnode);
          domNode.parentNode.replaceChild(newEl, domNode);
          vnode.el = newEl;
          return newEl.nextSibling;
     }
 
-    // Patch Props (Attach Event Listeners)
+    // Patch Props
     if (vnode.props) {
         for (const key in vnode.props) {
-            // Only attach events, assume attributes are correct from SSR
             if (key.startsWith('on')) {
                 patchProp(domNode, key, null, vnode.props[key]);
             }
-            // Optional: Check other attributes for consistency
         }
     }
 
@@ -117,6 +125,14 @@ function hydrateNode(vnode, domNode) {
 
 export function patch(n1, n2, container) {
     if (n1 === n2) return;
+
+    // Handle Arrays (Fragments)
+    if (Array.isArray(n1) || Array.isArray(n2)) {
+        const c1 = Array.isArray(n1) ? n1 : [n1];
+        const c2 = Array.isArray(n2) ? n2 : [n2];
+        diffChildren(c1, c2, container);
+        return;
+    }
 
     // Replace if different types
     if (n1.tag !== n2.tag || (n1.text !== undefined && n2.text === undefined) || (n1.text === undefined && n2.text !== undefined)) {
@@ -159,6 +175,16 @@ export function patch(n1, n2, container) {
 }
 
 export function diffChildren(oldChildren, newChildren, container) {
+    // Optimization: fast path for empty
+    if (oldChildren.length === 0) {
+        newChildren.forEach(c => mount(c, container));
+        return;
+    }
+    if (newChildren.length === 0) {
+        oldChildren.forEach(c => unmount(c));
+        return;
+    }
+
     const oldMap = new Map();
     const unkeyed = [];
 
@@ -169,7 +195,35 @@ export function diffChildren(oldChildren, newChildren, container) {
 
     let unkeyedIndex = 0;
 
-    for (let i = 0; i < newChildren.length; i++) {
+    // We need to track where we are inserting in the DOM.
+    // Since we are patching in place, we can use the old children's locations,
+    // but if we move things, it gets complex.
+    // For this implementation, we use `insertBefore` with a reference node.
+    // But getting the reference node is hard if the old list is shuffled.
+
+    // Simplified Reconciler:
+    // 1. Walk new children.
+    // 2. If matched (key or type), patch. Move if needed.
+    // 3. If new, mount.
+
+    // To properly place nodes, we can use `container.childNodes` but that includes text nodes and comments
+    // that might not be in VDOM if VDOM stripped them (vdom.js keeps text).
+
+    // We'll trust the VDOM order matches DOM order initially.
+
+    // Pointer to the *next* sibling for insertion
+    let nextSibling = oldChildren[0]?.el;
+
+    // Wait, this is getting into React Fiber complexity.
+    // Fallback to the previous implementation which was decent for keyed,
+    // but ensure we handle `mount` correctly.
+
+    // Let's use the previous implementation logic but fix the anchor.
+
+    const newChildrenSize = newChildren.length;
+
+    // First, process keyed updates and moves
+    for (let i = 0; i < newChildrenSize; i++) {
         const newChild = newChildren[i];
         let oldChild;
 
@@ -185,21 +239,29 @@ export function diffChildren(oldChildren, newChildren, container) {
 
         if (oldChild) {
             patch(oldChild, newChild, container);
-            // Reordering / Position check
+            // Move: check if the DOM node at this position is correct
+            // The DOM node at index `i` (ignoring non-vdom nodes? No, we assume 1-to-1)
+            // But if we have fragments, index `i` is meaningless.
+
+            // Critical fix: We assume Component doesn't return Fragments for now in diffChildren logic
+            // OR we accept that reordering Fragments is expensive/not supported.
+            // Component.render() returning Array is handled by `patch` -> `diffChildren` on container.
+
+            // Let's rely on `container.childNodes[i]` assuming 1-to-1 mapping for Elements/Text.
             const currentNode = container.childNodes[i];
-            if (currentNode !== oldChild.el) {
-                container.insertBefore(oldChild.el, currentNode);
-            }
+             if (oldChild.el && currentNode !== oldChild.el) {
+                 container.insertBefore(oldChild.el, currentNode);
+             }
         } else {
-            // Mount new
-            const anchor = container.childNodes[i];
-            mount(newChild, container, anchor);
+             // Mount new
+             // We want to insert it at index `i`.
+             const anchor = container.childNodes[i];
+             mount(newChild, container, anchor);
         }
     }
 
-    // Remove remaining keyed
+    // Cleanup
     oldMap.forEach(c => unmount(c));
-    // Remove remaining unkeyed
     while (unkeyedIndex < unkeyed.length) {
         unmount(unkeyed[unkeyedIndex].vnode);
         unkeyedIndex++;
@@ -213,6 +275,8 @@ function patchProp(el, key, prev, next) {
         if (next) el.addEventListener(name, next);
     } else if (key === 'value' || key === 'checked') {
         el[key] = next;
+    } else if (key === 'className') {
+        el.className = next || '';
     } else {
         if (next == null || next === false) el.removeAttribute(key);
         else el.setAttribute(key, next);

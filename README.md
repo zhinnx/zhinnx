@@ -1,69 +1,53 @@
-# ZhinStack
+# Zhinnx (v2)
 
-**ZhinStack** adalah tech stack web modern, ringan, dan fleksibel berbasis JavaScript (ES6+). Dirancang untuk memberikan pengalaman pengembangan seperti React namun dengan kesederhanaan Vanilla JS.
+**The Modern, Zero-Config, SEO-First Web Framework.**
 
-## Fitur Utama
-*   🚀 **Zero Build Tooling**: Tidak butuh Webpack/Vite untuk memulai. Jalan langsung di browser modern.
-*   ⚛️ **Component Based**: Arsitektur komponen modular dengan lifecycle dan state.
-*   ⚡ **Serverless Ready**: Backend API terstruktur siap deploy ke Vercel atau Node.js.
-*   🎨 **Tailwind Friendly**: Dukungan native untuk utility-first CSS.
-*   🔄 **Simple State Management**: Global store terintegrasi tanpa boilerplate rumit.
+Zhinnx is built for developers who want the power of React/Next.js but the simplicity of vanilla JS. No build steps required. Just write code and run.
 
-## Struktur Proyek
+![Zhinnx Logo](/site/zhinnx_nobg.png)
 
-```
-/
-├── api/            # Backend API Endpoints
-├── src/            # Frontend Source Code
-│   ├── components/ # Reusable UI Components
-│   ├── pages/      # Route Pages
-│   └── store/      # Global State
-├── zhin-core/      # The Framework Core
-└── server.js       # Local Development Server
-```
+## Features
 
-## Cara Menggunakan
+- ⚡ **Zero-Install Mode:** Use via CDN or npm.
+- 🚀 **Streaming SSR:** Blazing fast Time-To-First-Byte.
+- 🕸 **SEO Optimized:** Automatic meta tags and OpenGraph injection.
+- 🦎 **Fine-Grained Reactivity:** Proxy-based state management.
+- 📂 **File-Based Routing:** `src/pages` determines your routes.
 
-1.  **Clone / Download** repository ini.
-2.  **Jalankan Server Development**:
-    Pastikan Anda memiliki Node.js terinstal.
+## Quick Start
 
-    ```bash
-    npm start
-    # atau
-    node server.js
-    ```
+### Create a new project
 
-3.  **Buka Browser**:
-    Akses `http://localhost:3000`
-
-## Dokumentasi Lengkap
-
-Untuk penjelasan mendalam mengenai arsitektur, filosofi, dan cara kerja ZhinStack, silakan baca [ZHINSTACK_DESIGN.md](./ZHINSTACK_DESIGN.md).
-
-## Contoh Kode
-
-**Membuat Komponen Baru:**
-
-```javascript
-import { Component, html } from '../../zhin-core/Component.js';
-
-export class MyButton extends Component {
-    render() {
-        return html`<button class="btn">Click Me</button>`;
-    }
-}
+```bash
+npx zhinnx create my-app
+cd my-app
+node server.js
 ```
 
-**Menambah Route Baru:**
+### Manual Setup
 
-1. Buat file `src/pages/NewPage.js`
-2. Daftarkan di `src/app.js`:
+1. Install:
+   ```bash
+   npm install zhinnx
+   ```
+2. Create `server.js`:
    ```javascript
-   const routes = {
-       '/newpage': NewPage
-   };
+   import { handleRequest } from '@zhinnx/server';
+   import http from 'http';
+   http.createServer(handleRequest).listen(3000);
+   ```
+3. Create `src/pages/index.js`:
+   ```javascript
+   import { Component, html } from '@zhinnx/core';
+   export default class Page extends Component {
+     render() { return html`<h1>Hello World</h1>`; }
+   }
    ```
 
----
-Dibuat dengan ❤️ oleh Arsitek ZhinStack.
+## Documentation
+
+See [ZHINNX_ARCHITECTURE.md](./ZHINNX_ARCHITECTURE.md) for deep dive.
+
+## License
+
+MIT

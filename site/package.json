@@ -1,0 +1,10 @@
+{
+  "name": "zhinnx-starter",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@zhinnx/core": "file:../../packages/core",
+    "@zhinnx/server": "file:../../packages/server"
+  }
+}
