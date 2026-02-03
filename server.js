@@ -5,8 +5,6 @@ import { fileURLToPath } from 'url';
 
 // SSR Imports
 import { renderPageStream } from './zhin-core/ssr.js';
-import { Home } from './src/pages/Home.js';
-import { About } from './src/pages/About.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,16 +20,64 @@ const MIME_TYPES = {
     '.jpg': 'image/jpeg',
 };
 
-// Route Configuration
-const routes = {
-    '/': Home,
-    '/about': About,
-};
+// --- File-Based Routing Logic ---
+function scanRoutes(dir, baseRoute = '') {
+    const routes = {};
+    const items = fs.readdirSync(dir);
 
-// ISR Cache (Still useful for full pages, but streaming bypasses it usually unless we cache the stream output)
-// For simplicity in this iteration: We won't cache streamed responses OR we cache them after completion.
-// Let's implement basic streaming without caching first for TTI.
-const isrCache = new Map();
+    for (const item of items) {
+        const fullPath = path.join(dir, item);
+        const stat = fs.statSync(fullPath);
+
+        if (stat.isDirectory()) {
+            // Recurse
+            Object.assign(routes, scanRoutes(fullPath, `${baseRoute}/${item}`));
+        } else if (item.endsWith('.js')) {
+            const name = path.basename(item, '.js');
+            let routePath = baseRoute;
+
+            if (name === 'index') {
+                // /pages/index.js -> /
+                if (routePath === '') routePath = '/';
+            } else if (name.startsWith('[') && name.endsWith(']')) {
+                // /pages/[id].js -> /:id
+                const paramName = name.slice(1, -1);
+                routePath = `${baseRoute}/:${paramName}`;
+            } else if (['layout', 'error', 'loading'].includes(name)) {
+                // Special files, ignore as routes
+                continue;
+            } else {
+                // /pages/about.js -> /about
+                routePath = `${baseRoute}/${name.toLowerCase()}`;
+            }
+
+            // Convert path params :id to regex
+            // e.g. /users/:id -> ^/users/([^/]+)$
+            const paramNames = [];
+            const regexPath = routePath.replace(/:([^/]+)/g, (_, key) => {
+                paramNames.push(key);
+                return '([^/]+)';
+            });
+
+            // Normalize path for import (relative to server.js)
+            const importPath = './' + path.relative(__dirname, fullPath).replace(/\\/g, '/');
+
+            routes[routePath] = {
+                path: routePath,
+                regex: `^${regexPath}$`,
+                params: paramNames,
+                importPath: importPath
+            };
+        }
+    }
+    return routes;
+}
+
+// Generate Route Map
+const PAGES_DIR = path.join(__dirname, 'src', 'pages');
+// Note: In a real app, we might watch for file changes to update this map.
+const ROUTE_MAP = scanRoutes(PAGES_DIR);
+console.log('[Server] Discovered Routes:', ROUTE_MAP);
 
 const server = http.createServer(async (req, res) => {
     // Basic CORS support
@@ -68,9 +114,20 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Static File Serving
-    // If it has an extension, treat as static file
+    // Only serve files from whitelisted directories or specific extensions if needed
+    // For "No Build" setup, we need to serve src/ and zhin-core/ to the browser
     if (path.extname(pathname)) {
-        // Prevent directory traversal
+        // Security Check: Block sensitive files
+        if (pathname === '/server.js' || pathname === '/package.json' || pathname.startsWith('/verification')) {
+            res.statusCode = 403;
+            res.end('Forbidden');
+            return;
+        }
+
+        // Whitelist Check (Optional but recommended)
+        // const allowedDirs = ['/src', '/zhin-core', '/public', '/assets'];
+        // if (!allowedDirs.some(dir => pathname.startsWith(dir)) && pathname !== '/index.html') { ... }
+
         const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
         const filePath = path.join(__dirname, safePath);
 
@@ -92,27 +149,62 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // SSR Logic (For non-static routes)
-    const PageComponent = routes[pathname] || routes['404'] || Home; // Fallback to Home or 404 Page
+    // SSR Logic with File-Based Routing
+    console.log(`[SSR] Matching: ${pathname}`);
 
-    console.log(`[SSR] Streaming: ${pathname}`);
-    res.setHeader('Content-Type', 'text/html');
+    // Find matching route
+    let matchedRoute = null;
+    let params = {};
 
-    try {
-        const stream = renderPageStream(PageComponent, {}, pathname);
-        stream.pipe(res);
-    } catch (err) {
-        console.error('SSR Error:', err);
-        if (!res.headersSent) {
-            res.statusCode = 500;
-            res.end('Internal Server Error');
+    for (const route of Object.values(ROUTE_MAP)) {
+        const re = new RegExp(route.regex);
+        const match = pathname.match(re);
+        if (match) {
+            matchedRoute = route;
+            // Extract params
+            route.params.forEach((key, index) => {
+                params[key] = match[index + 1];
+            });
+            break;
         }
+    }
+
+    if (matchedRoute) {
+        try {
+            const module = await import(matchedRoute.importPath);
+            const PageComponent = module.default;
+
+            res.setHeader('Content-Type', 'text/html');
+
+            // Pass ROUTE_MAP injection
+            const stream = renderPageStream(
+                PageComponent,
+                { params },
+                pathname,
+                { routes: ROUTE_MAP }
+            );
+
+            stream.pipe(res);
+
+        } catch (err) {
+            console.error('SSR Error:', err);
+            if (!res.headersSent) {
+                res.statusCode = 500;
+                res.end('Internal Server Error');
+            }
+        }
+    } else {
+        res.statusCode = 404;
+        res.end('<h1>404 - Page Not Found</h1>');
     }
 });
 
 server.listen(PORT, () => {
     console.log(`\n🚀 ZhinStack v2 Server running at http://localhost:${PORT}`);
-    console.log(`   - Mode: Streaming SSR`);
+    console.log(`   - Mode: File-Based Routing`);
     console.log(`   - Frontend: http://localhost:${PORT}/`);
     console.log(`   - API Hello: http://localhost:${PORT}/api/hello`);
 });
+
+// Export for usage if needed
+export { ROUTE_MAP };

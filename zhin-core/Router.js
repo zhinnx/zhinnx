@@ -5,11 +5,11 @@
 
 export class Router {
   /**
-   * @param {Object} routes - Map of path to Component Class. e.g., { '/': Home, '/about': About }
+   * @param {Object} routeMap - Map of routes from server { '/path': { regex, importPath, params } }
    * @param {HTMLElement} rootElement - The DOM element to render pages into.
    */
-  constructor(routes, rootElement) {
-    this.routes = routes;
+  constructor(routeMap, rootElement) {
+    this.routeMap = routeMap || {};
     this.root = rootElement;
     this.hydrated = false;
 
@@ -28,50 +28,71 @@ export class Router {
    * Resolve the current route and render the component.
    */
   resolve() {
-    // Support History API for SSR hydration
     const path = window.location.pathname || '/';
 
-    // Find matching route
-    const routeHandler = this.routes[path] || this.routes['404'];
+    // Find matching route using Regex
+    let matchedRoute = null;
+    let params = {};
+    let matchedKey = null;
 
-    if (routeHandler) {
+    // routeMap keys are simple paths, but values contain regex
+    for (const [key, route] of Object.entries(this.routeMap)) {
+        const re = new RegExp(route.regex);
+        const match = path.match(re);
+        if (match) {
+            matchedKey = key;
+            matchedRoute = route;
+            // Extract params
+            if (route.params) {
+                route.params.forEach((key, index) => {
+                    params[key] = match[index + 1];
+                });
+            }
+            break;
+        }
+    }
+
+    if (matchedRoute) {
       const handleComponent = (ComponentClass) => {
-          // If root has children and it's the first load, assume SSR content
-          // The Component.mount logic now handles hydration automatically if container has children.
-          // However, we must NOT clear innerHTML if we intend to hydrate.
-
           const shouldHydrate = this.root.hasChildNodes() && !this.hydrated;
 
           if (!shouldHydrate) {
               this.root.innerHTML = '';
           }
 
-          // Instantiate and mount the page component
-          const page = new ComponentClass();
+          // Instantiate and mount the page component with Params
+          const page = new ComponentClass({ params });
           page.mount(this.root);
 
           this.hydrated = true;
       };
 
-      // Check if it's a Dynamic Import (Promise/Function)
-      if (typeof routeHandler === 'function' && !routeHandler.prototype) {
-          // Assume it's an import() function
-          // Show loading state if not hydrating
-          if (!this.hydrated && !this.root.hasChildNodes()) {
-             this.root.innerHTML = '<div>Loading route...</div>';
-          }
+      // Check if we have the module loaded (client-side mapping)
+      // For file-based routing, `route.importPath` is server-side relative.
+      // Client needs to know how to import it.
+      // We assume `window.__ROUTES__` contains `importFn` or we Map it in `app.js`.
+      // Actually, passing functions in JSON (window.__ROUTES__) is impossible.
+      // So `app.js` must construct the Router with a mapping of `key -> import()`.
 
-          routeHandler().then(module => {
+      // If `routeMap` passed to constructor has a `loader` property (function), use it.
+      if (matchedRoute.loader) {
+           if (!this.hydrated && !this.root.hasChildNodes()) {
+             this.root.innerHTML = '<div>Loading route...</div>';
+           }
+
+           matchedRoute.loader().then(module => {
               const Comp = module.default || module;
               handleComponent(Comp);
-          }).catch(err => {
+           }).catch(err => {
               console.error('Route Loading Error', err);
               this.root.innerHTML = '<h1>Error Loading Page</h1>';
-          });
+           });
       } else {
-          // Standard Class Component
-          handleComponent(routeHandler);
+          // Fallback or Error
+          console.error('Route found but no loader defined on client:', matchedKey);
+          this.root.innerHTML = '<h1>Error: Route Configuration Missing</h1>';
       }
+
     } else {
       this.root.innerHTML = '<h1>404 - Page Not Found</h1>';
     }

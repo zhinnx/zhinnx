@@ -88,7 +88,7 @@ function escapeHtml(text) {
  * @param {string} url - Current URL
  * @returns {Readable} - Node.js Readable Stream
  */
-export function renderPageStream(PageComponent, props = {}, url = '/') {
+export function renderPageStream(PageComponent, props = {}, url = '/', injections = {}) {
     // Instantiate Page to get metadata
     const page = new PageComponent(props);
     const meta = PageComponent.meta || {};
@@ -100,6 +100,12 @@ export function renderPageStream(PageComponent, props = {}, url = '/') {
         read() {}
     });
 
+    // Handle Injections (e.g. __ROUTES__)
+    let scripts = '';
+    if (injections.routes) {
+        scripts += `<script>window.__ROUTES__ = ${JSON.stringify(injections.routes)};</script>`;
+    }
+
     // Chunk 1: Head (Push Immediately for TTFB)
     const head = `<!DOCTYPE html>
 <html lang="en">
@@ -107,6 +113,7 @@ export function renderPageStream(PageComponent, props = {}, url = '/') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${escapeHtml(title)}</title>
+    ${scripts}
     <meta name="description" content="${escapeHtml(description)}">
 
     <!-- OpenGraph -->
