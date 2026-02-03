@@ -32,6 +32,89 @@ function createDOM(vnode) {
     return el;
 }
 
+/**
+ * Hydrates a VNode into an existing DOM Node.
+ * Assumes the DOM structure matches the VNode structure (SSR).
+ */
+export function hydrate(vnode, container) {
+    // If container is an element and we are hydrating children into it
+    // Usually hydrate is called on a root component with a container.
+    // We need to match vnode to container.firstChild.
+
+    // Simplification: We assume the container already has the content rendered by SSR.
+    // We walk the children.
+
+    let domNode = container.firstChild;
+
+    // If vnode is an array (Fragment)
+    if (Array.isArray(vnode)) {
+         vnode.forEach(child => {
+             domNode = hydrateNode(child, domNode);
+         });
+    } else {
+         hydrateNode(vnode, domNode);
+    }
+}
+
+function hydrateNode(vnode, domNode) {
+    if (!domNode) {
+        // Mismatch: VNode exists but DOM doesn't. Mount it.
+        // This handles client-side only nodes or mismatches.
+        mount(vnode, domNode ? domNode.parentNode : null); // Parent unknown here if not passed
+        return null;
+    }
+
+    vnode.el = domNode;
+
+    // Text Node
+    if (vnode.text !== undefined) {
+        if (domNode.nodeType !== Node.TEXT_NODE) {
+            // Mismatch type
+            console.warn('Hydration Mismatch: Expected Text, found Element');
+            const newEl = createDOM(vnode);
+            domNode.parentNode.replaceChild(newEl, domNode);
+            vnode.el = newEl;
+            return newEl.nextSibling;
+        }
+        if (domNode.nodeValue !== vnode.text) {
+             console.warn('Hydration Mismatch: Text content differs');
+             domNode.nodeValue = vnode.text;
+        }
+        return domNode.nextSibling;
+    }
+
+    // Element Node
+    if (domNode.nodeType !== Node.ELEMENT_NODE || domNode.tagName.toLowerCase() !== vnode.tag.toLowerCase()) {
+         console.warn(`Hydration Mismatch: Expected <${vnode.tag}>, found <${domNode.tagName}>`);
+         const newEl = createDOM(vnode);
+         domNode.parentNode.replaceChild(newEl, domNode);
+         vnode.el = newEl;
+         return newEl.nextSibling;
+    }
+
+    // Patch Props (Attach Event Listeners)
+    if (vnode.props) {
+        for (const key in vnode.props) {
+            // Only attach events, assume attributes are correct from SSR
+            if (key.startsWith('on')) {
+                patchProp(domNode, key, null, vnode.props[key]);
+            }
+            // Optional: Check other attributes for consistency
+        }
+    }
+
+    // Hydrate Children
+    let childDomNode = domNode.firstChild;
+    if (vnode.children) {
+        vnode.children.forEach(child => {
+            childDomNode = hydrateNode(child, childDomNode);
+        });
+    }
+
+    return domNode.nextSibling;
+}
+
+
 export function patch(n1, n2, container) {
     if (n1 === n2) return;
 

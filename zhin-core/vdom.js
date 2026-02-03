@@ -25,6 +25,15 @@ const UID = '__ZHIN_VAL__';
  * Note: This implementation requires a browser environment (DOM).
  */
 export function html(strings, ...values) {
+    // SSR Check - Return SSR Object
+    if (typeof document === 'undefined' || (typeof global !== 'undefined' && global.IS_SSR_TEST)) {
+        return {
+             isSSR: true,
+             strings,
+             values
+        };
+    }
+
     // 1. Interleave strings and placeholders
     let htmlString = '';
     const valMap = new Map();
@@ -37,13 +46,6 @@ export function html(strings, ...values) {
             htmlString += key;
         }
     });
-
-    // 2. Parse using <template>
-    // Guard against non-browser environments (e.g. Node tests)
-    if (typeof document === 'undefined') {
-        console.warn('html`` template tag requires a browser environment (DOM). Returning empty VNode.');
-        return h('div', {}, ['SSR-Not-Supported-Yet']);
-    }
 
     const template = document.createElement('template');
     template.innerHTML = htmlString;

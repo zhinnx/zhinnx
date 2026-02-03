@@ -3,6 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// SSR Imports
+import { renderPageStream } from './zhin-core/ssr.js';
+import { Home } from './src/pages/Home.js';
+import { About } from './src/pages/About.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -16,6 +21,17 @@ const MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
 };
+
+// Route Configuration
+const routes = {
+    '/': Home,
+    '/about': About,
+};
+
+// ISR Cache (Still useful for full pages, but streaming bypasses it usually unless we cache the stream output)
+// For simplicity in this iteration: We won't cache streamed responses OR we cache them after completion.
+// Let's implement basic streaming without caching first for TTI.
+const isrCache = new Map();
 
 const server = http.createServer(async (req, res) => {
     // Basic CORS support
@@ -32,10 +48,7 @@ const server = http.createServer(async (req, res) => {
 
         if (fs.existsSync(modulePath)) {
             try {
-                // Dynamic import of the API module
-                // We add a query param to ensure we get a fresh module if developing (optional)
                 const module = await import(modulePath);
-
                 if (module.default) {
                     await module.default(req, res);
                 } else {
@@ -55,31 +68,51 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Static File Serving
-    if (pathname === '/') pathname = '/index.html';
+    // If it has an extension, treat as static file
+    if (path.extname(pathname)) {
+        // Prevent directory traversal
+        const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+        const filePath = path.join(__dirname, safePath);
 
-    // Prevent directory traversal
-    const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-    const filePath = path.join(__dirname, safePath);
-
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                 res.statusCode = 404;
-                 res.end('Not Found');
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                if (err.code === 'ENOENT') {
+                     res.statusCode = 404;
+                     res.end('Not Found');
+                } else {
+                     res.statusCode = 500;
+                     res.end('Server Error');
+                }
             } else {
-                 res.statusCode = 500;
-                 res.end('Server Error');
+                const ext = path.extname(filePath);
+                res.setHeader('Content-Type', MIME_TYPES[ext] || 'text/plain');
+                res.end(data);
             }
-        } else {
-            const ext = path.extname(filePath);
-            res.setHeader('Content-Type', MIME_TYPES[ext] || 'text/plain');
-            res.end(data);
+        });
+        return;
+    }
+
+    // SSR Logic (For non-static routes)
+    const PageComponent = routes[pathname] || routes['404'] || Home; // Fallback to Home or 404 Page
+
+    console.log(`[SSR] Streaming: ${pathname}`);
+    res.setHeader('Content-Type', 'text/html');
+
+    try {
+        const stream = renderPageStream(PageComponent, {}, pathname);
+        stream.pipe(res);
+    } catch (err) {
+        console.error('SSR Error:', err);
+        if (!res.headersSent) {
+            res.statusCode = 500;
+            res.end('Internal Server Error');
         }
-    });
+    }
 });
 
 server.listen(PORT, () => {
-    console.log(`\n🚀 ZhinStack Dev Server running at http://localhost:${PORT}`);
+    console.log(`\n🚀 ZhinStack v2 Server running at http://localhost:${PORT}`);
+    console.log(`   - Mode: Streaming SSR`);
     console.log(`   - Frontend: http://localhost:${PORT}/`);
     console.log(`   - API Hello: http://localhost:${PORT}/api/hello`);
 });
