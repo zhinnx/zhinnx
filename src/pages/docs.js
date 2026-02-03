@@ -116,7 +116,7 @@ export default class DocsPage extends Component {
 
                             <p class="mb-4">Alternatively, you can install zhinnx into an existing project via npm:</p>
                              <div class="bg-gray-100 text-black p-4 border-2 border-black mb-12">
-                                <code class="font-mono">npm install @zhinnx/core @zhinnx/server</code>
+                                <code class="font-mono">npm install zhinnx-core zhinnx-server</code>
                             </div>
 
                             <hr class="border-2 border-black my-12" />
@@ -140,7 +140,7 @@ export default class DocsPage extends Component {
 
                             <div class="bg-gray-50 border-2 border-black p-6 mb-8 overflow-x-auto">
 <pre class="font-mono text-sm">
-import { Component, html } from '@zhinnx/core';
+import { Component, html } from 'zhinnx-core';
 
 export class Counter extends Component {
   constructor() {
@@ -185,7 +185,7 @@ export class Counter extends Component {
                             <h2 id="ssr" class="text-4xl font-bold mb-6">SSR & Streaming</h2>
                             <p class="mb-6">Server-Side Rendering (SSR) is enabled by default. zhinnx takes this a step further with <strong>HTML Streaming</strong>.</p>
                             <p class="mb-6">When a request comes in, the server immediately sends the document head and starts streaming the body as it renders. This ensures the browser can start loading CSS, JS, and fonts immediately, resulting in superior performance metrics.</p>
-                            <p class="mb-12">This happens automatically in <code>server.js</code> via the <code>@zhinnx/server</code> package. No configuration is needed.</p>
+                            <p class="mb-12">This happens automatically in <code>server.js</code> via the <code>zhinnx-server</code> package. No configuration is needed.</p>
 
                         </div>
                     </main>

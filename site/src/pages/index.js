@@ -108,7 +108,7 @@ export default class LandingPage extends Component {
                                 <div>
                                     <h3 class="text-3xl font-bold mb-4">Native NPM Integration</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        zhinnx is not a walled garden. It is built as a set of modular packages (@zhinnx/core, @zhinnx/server) that you can install individually or together. This means you can drop zhinnx components into an existing project or build a new one from scratch using standard tools.
+                                        zhinnx is not a walled garden. It is built as a set of modular packages (zhinnx-core, zhinnx-server) that you can install individually or together. This means you can drop zhinnx components into an existing project or build a new one from scratch using standard tools.
                                     </p>
                                     <p class="text-lg text-gray-700 leading-relaxed">
                                         Unlike other frameworks that require specific CLI tools or global installations to function, zhinnx lives entirely in your <code>package.json</code>. This guarantees long-term stability and compatibility with the vast JavaScript ecosystem.
@@ -187,7 +187,7 @@ export default class LandingPage extends Component {
                             <div class="border-2 border-black bg-white p-8 comic-shadow h-full flex flex-col justify-center">
                                 <h3 class="text-2xl font-bold mb-4">Or add to existing project:</h3>
                                 <div class="bg-gray-100 p-4 border-2 border-black mb-4">
-                                    <code class="font-mono text-black">npm install @zhinnx/core @zhinnx/server</code>
+                                    <code class="font-mono text-black">npm install zhinnx-core zhinnx-server</code>
                                 </div>
                                 <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
                             </div>
@@ -212,5 +212,24 @@ export default class LandingPage extends Component {
         `;
     }
 
-    afterRender() {}
+    afterRender() {
+        if (window.gsap) {
+            window.gsap.from(".hero-text > *", {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.2
+            });
+
+            window.gsap.from(".hero-image", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                ease: "elastic.out(1, 0.75)",
+                delay: 0.5
+            });
+        }
+    }
 }

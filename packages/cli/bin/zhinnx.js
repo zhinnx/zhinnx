@@ -2,17 +2,104 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// Assuming this script is at packages/cli/bin/zhinnx.js
-// Repo root is ../../..
-const REPO_ROOT = path.resolve(__dirname, '../../..');
 
 const args = process.argv.slice(2);
 const command = args[0];
+
+// Template Generator Functions
+function generatePackageJson(projectName) {
+    const name = path.basename(projectName);
+    return `{
+  "name": "${name}",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "zhinnx-core": "^2.0.0",
+    "zhinnx-server": "^2.0.0"
+  }
+}
+`;
+}
+
+function generateServerJs() {
+    return `import http from 'http';
+import { handleRequest } from 'zhinnx-server';
+
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(handleRequest);
+
+server.listen(PORT, () => {
+    console.log('\\n🚀 zhinnx app running at http://localhost:' + PORT);
+});
+`;
+}
+
+function generateClientAppJs() {
+    return `import { Router } from 'zhinnx-core';
+
+// We rely on window.__ROUTES__ injected by the server.
+const serverRoutes = window.__ROUTES__ || {};
+const clientRoutes = {};
+
+// Helper to dynamically import pages
+const importPage = (path) => {
+    // path comes from server scan, e.g., "./src/pages/Home.js"
+    // Remove leading dot to make it absolute for the browser
+    const cleanPath = path.replace(/^\\./, '');
+    return import(cleanPath);
+};
+
+// Transform server route map to client route map
+for (const [key, route] of Object.entries(serverRoutes)) {
+    clientRoutes[key] = {
+        ...route,
+        loader: () => importPage(route.importPath)
+    };
+}
+
+const rootElement = document.getElementById('app');
+if (rootElement) {
+    new Router(clientRoutes, rootElement);
+} else {
+    console.error('Root element #app not found');
+}
+`;
+}
+
+function generateIndexPage() {
+    return `import { Component, html } from 'zhinnx-core';
+
+export default class HomePage extends Component {
+    static meta = {
+        title: 'Welcome to zhinnx',
+        description: 'Your new zhinnx app'
+    }
+
+    render() {
+        return html\`
+            <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+                <h1>Welcome to zhinnx</h1>
+                <p>Edit <code>src/pages/index.js</code> to get started.</p>
+            </div>
+        \`;
+    }
+}
+`;
+}
+
+function generateApiHello() {
+    return `import { createHandler } from 'zhinnx-server';
+
+export default createHandler(async (req, res) => {
+    return { message: "Hello from zhinnx API!" };
+});
+`;
+}
 
 async function main() {
     if (command === 'create') {
@@ -28,54 +115,43 @@ async function main() {
             process.exit(1);
         }
 
-        // Find starter template
-        // 1. In Repo (Development)
-        let starterDir = path.join(REPO_ROOT, 'examples/starter');
-
-        if (!fs.existsSync(starterDir)) {
-             // 2. If installed via npm, usually adjacent or in lib?
-             // Since we are building the framework structure now, we focus on Repo path.
-             console.error('Starter template not found at ' + starterDir);
-             process.exit(1);
-        }
-
         console.log(`Creating project in ${targetDir}...`);
+
         try {
-            fs.cpSync(starterDir, targetDir, { recursive: true });
+            // Create directories
+            fs.mkdirSync(targetDir, { recursive: true });
+            fs.mkdirSync(path.join(targetDir, 'src', 'pages'), { recursive: true });
+            fs.mkdirSync(path.join(targetDir, 'src', 'components'), { recursive: true });
+            fs.mkdirSync(path.join(targetDir, 'api'), { recursive: true });
+            fs.mkdirSync(path.join(targetDir, 'public'), { recursive: true });
+
+            // Create files
+            fs.writeFileSync(path.join(targetDir, 'package.json'), generatePackageJson(projectName));
+            fs.writeFileSync(path.join(targetDir, 'server.js'), generateServerJs());
+            fs.writeFileSync(path.join(targetDir, 'src', 'app.js'), generateClientAppJs());
+            fs.writeFileSync(path.join(targetDir, 'src', 'pages', 'index.js'), generateIndexPage());
+            fs.writeFileSync(path.join(targetDir, 'api', 'hello.js'), generateApiHello());
+
+            // Create gitignore
+            fs.writeFileSync(path.join(targetDir, '.gitignore'), 'node_modules\n.DS_Store\n.env\n');
+
         } catch (e) {
-            console.error('Error copying files:', e);
+            console.error('Error creating project:', e);
             process.exit(1);
         }
 
         console.log('Project created successfully!');
         console.log(`\nNext steps:`);
         console.log(`  cd ${projectName}`);
-        console.log(`  npm install (optional, for types/linting)`);
+        console.log(`  npm install`);
         console.log(`  node server.js`);
-
-    } else if (command === 'dev') {
-        console.log('Starting Zhinnx Dev Server...');
-        if (!fs.existsSync('server.js')) {
-            console.error('server.js not found. Are you in a Zhinnx project root?');
-            process.exit(1);
-        }
-        const child = spawn('node', ['server.js'], { stdio: 'inherit' });
-        child.on('close', (code) => {
-            process.exit(code);
-        });
-
-    } else if (command === 'build') {
-        console.log('Zhinnx is Zero-Build! Your code is production ready.');
-        console.log('Just deploy your folder or run "node server.js".');
 
     } else {
         console.log(`
-Zhinnx CLI v2.0.0
+zhinnx CLI v2.0.0
 -----------------
 Usage:
-  zhinnx create <project-name>   Create a new project
-  zhinnx dev                     Start dev server
-  zhinnx build                   Build for production (No-op)
+  npx zhinnx create <project-name>
 `);
     }
 }

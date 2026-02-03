@@ -1,11 +1,14 @@
 {
-  "name": "@zhinnx/core",
+  "name": "zhinnx-core",
   "version": "2.0.0",
   "description": "Core library for zhinnx framework",
   "type": "module",
   "main": "./index.js",
   "exports": {
     ".": "./index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": ["zhinnx", "framework", "vdom", "reactive"],
   "license": "MIT"

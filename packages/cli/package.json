@@ -6,6 +6,9 @@
   "bin": {
     "zhinnx": "./bin/zhinnx.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": ["zhinnx", "cli", "scaffold"],
   "license": "MIT"
 }

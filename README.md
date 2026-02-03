@@ -32,13 +32,13 @@ node server.js
    ```
 2. Create `server.js`:
    ```javascript
-   import { handleRequest } from '@zhinnx/server';
+   import { handleRequest } from 'zhinnx-server';
    import http from 'http';
    http.createServer(handleRequest).listen(3000);
    ```
 3. Create `src/pages/index.js`:
    ```javascript
-   import { Component, html } from '@zhinnx/core';
+   import { Component, html } from 'zhinnx-core';
    export default class Page extends Component {
      render() { return html`<h1>Hello World</h1>`; }
    }
