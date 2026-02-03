@@ -40,7 +40,7 @@ export default class LandingPage extends Component {
 
                             <!-- Mobile Menu Button -->
                             <div class="md:hidden">
-                                <button id="menu-btn" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
+                                <button id="menu-btn" onclick="${() => this.toggleMenu()}" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${this.state.mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}" />
                                     </svg>
@@ -212,13 +212,5 @@ export default class LandingPage extends Component {
         `;
     }
 
-    afterRender() {
-        // Event delegation for menu button
-        const menuBtn = this.$('#menu-btn');
-        if (menuBtn) {
-            menuBtn.addEventListener('click', () => {
-                this.toggleMenu();
-            });
-        }
-    }
+    afterRender() {}
 }
