@@ -1,7 +1,7 @@
 
-// Verification Script for ZhinStack v2 SSR & Hydration
+// Verification Script for zhinnx v2 SSR & Hydration
 
-console.log('--- Starting ZhinStack v2 SSR Verification ---');
+console.log('--- Starting zhinnx v2 SSR Verification ---');
 
 // --- 1. Mock DOM Environment for Hydration Test ---
 const Node = {

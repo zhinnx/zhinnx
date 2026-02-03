@@ -1,6 +1,6 @@
-# ZhinStack Next (v2) Architecture
+# zhinnx Next (v2) Architecture
 
-ZhinStack v2 is a modern, enterprise-grade web framework designed to be fast, simple, and standard-compliant. It avoids complex build tools in development by leveraging native ES Modules and modern browser capabilities.
+zhinnx v2 is a modern, enterprise-grade web framework designed to be fast, simple, and standard-compliant. It avoids complex build tools in development by leveraging native ES Modules and modern browser capabilities.
 
 ## 1. Core Architecture
 
@@ -63,7 +63,7 @@ graph TD
 ## 3. Final Folder Structure
 
 ```
-zhinstack/
+zhinnx/
 ├── api/                  # Vercel / Serverless Entry Points
 │   └── index.js          # Main Handler
 ├── public/               # Static Assets

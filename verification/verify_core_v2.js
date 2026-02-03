@@ -1,8 +1,8 @@
 
-// Verification Script for ZhinStack v2 Core Engine
+// Verification Script for zhinnx v2 Core Engine
 // Runs in Node.js with Mock DOM
 
-console.log('--- Starting ZhinStack v2 Core Verification ---');
+console.log('--- Starting zhinnx v2 Core Verification ---');
 
 // --- 1. Mock DOM Environment ---
 const Node = {

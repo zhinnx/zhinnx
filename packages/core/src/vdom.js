@@ -1,6 +1,6 @@
 
 /**
- * ZhinStack VDOM
+ * zhinnx VDOM
  * Lightweight Virtual DOM implementation.
  */
 

@@ -1,139 +1,128 @@
 import { Component, html } from '../../packages/core/index.js';
 
-export default class Index extends Component {
-  static meta = {
-      title: 'ZhinStack - The Modern Enterprise Framework',
-      description: 'Zero-config, VDOM-based, SSR-ready framework for modern web development.',
-      image: '/logo-full.svg'
-  };
+export default class LandingPage extends Component {
+    static meta = {
+        title: 'zhinnx - The Modern Tech Stack',
+        description: 'Professional, lightweight, and production-ready web framework.',
+        image: '/zhinnx_nobg.png'
+    }
 
-  render() {
-    return html`
-      <div class="min-h-screen bg-gray-50 text-gray-900 font-sans">
-        <!-- Hero Section -->
-        <header class="bg-white shadow-sm sticky top-0 z-50">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <img src="/logo-icon.svg" alt="ZhinStack Logo" class="h-10 w-10">
-                    <span class="text-2xl font-bold tracking-tight text-blue-600">ZhinStack</span>
-                </div>
-                <nav class="hidden md:flex gap-6 text-gray-600 font-medium">
-                    <a href="#features" class="hover:text-blue-600 transition">Features</a>
-                    <a href="#docs" class="hover:text-blue-600 transition">Docs</a>
-                    <a href="/about" class="hover:text-blue-600 transition">About</a>
-                    <a href="https://github.com/zhinstack" target="_blank" class="hover:text-blue-600 transition">GitHub</a>
+    render() {
+        return html`<div class="min-h-screen bg-white text-black overflow-x-hidden">
+                <nav class="sticky top-0 z-50 bg-white border-b-2 border-black">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex justify-between h-20 items-center">
+                            <div class="flex items-center gap-3">
+                                <img src="/zhinnx_nobg.png" alt="zhinnx" class="h-10 w-10 object-contain">
+                                <span class="text-2xl font-bold tracking-tighter">zhinnx</span>
+                            </div>
+                            <div class="hidden md:flex space-x-8 items-center">
+                                <a href="#features" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Features</a>
+                                <a href="#install" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Install</a>
+                                <a href="https://github.com/zhinnx/zhinnx" class="text-black font-bold hover:underline decoration-2 underline-offset-4">GitHub</a>
+                                <a href="#docs" class="bg-black text-white px-6 py-2 font-bold comic-shadow hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all border-2 border-black">Docs</a>
+                            </div>
+                        </div>
+                    </div>
                 </nav>
-            </div>
-        </header>
-
-        <main>
-            <!-- Hero -->
-            <section class="pt-24 pb-20 px-6 text-center">
-                <div class="container mx-auto max-w-4xl">
-                    <div class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-8">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                        </span>
-                        v2.0 Now Available
-                    </div>
-                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 text-gray-900 leading-tight">
-                        Build faster with <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">ZhinStack</span>
-                    </h1>
-                    <p class="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                        The "Peaceful Developer" framework. React-like mental model, Svelte-like performance, and Next.js-like DX.
-                    </p>
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="#docs" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">Get Started</a>
-                        <a href="https://github.com/zhinstack" target="_blank" class="bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition">View Source</a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Features Grid -->
-            <section id="features" class="py-20 bg-white">
-                <div class="container mx-auto px-6">
-                    <h2 class="text-3xl font-bold text-center mb-16">Why ZhinStack?</h2>
-                    <div class="grid md:grid-cols-3 gap-12">
-                        <div class="space-y-4">
-                            <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <header class="relative pt-20 pb-32 overflow-hidden border-b-2 border-black">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div class="hero-text opacity-0 transform translate-y-10">
+                                <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-8">THE TECH STACK <br><span class="text-gray-500">FOR SERIOUS</span> <br>BUILDERS.</h1>
+                                <p class="text-xl md:text-2xl font-medium text-gray-600 mb-10 max-w-lg border-l-4 border-black pl-6">No magic. No bloat. Just pure, unadulterated performance. Ready for npm. Ready for production.</p>
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <a href="#install" class="text-center bg-black text-white text-xl font-bold px-8 py-4 border-2 border-black comic-shadow hover:bg-gray-900 transition-all active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">npm install zhinnx</a>
+                                    <a href="#features" class="text-center bg-white text-black text-xl font-bold px-8 py-4 border-2 border-black comic-shadow hover:bg-gray-50 transition-all active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Learn More</a>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold">Blazing Fast</h3>
-                            <p class="text-gray-600">Powered by a custom Virtual DOM and Keyed Diffing engine. Minimal updates, maximum speed.</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 mb-4">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            <div class="hero-image hidden lg:flex justify-center items-center opacity-0 scale-90">
+                                <div class="relative w-full max-w-md aspect-square bg-gray-100 border-2 border-black comic-shadow p-8 flex items-center justify-center">
+                                    <img src="/zhinnx_nobg.png" alt="Zhinnx Box" class="w-full h-full object-contain grayscale">
+                                    <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 comic-shadow">
+                                        <span class="font-mono font-bold text-lg">v2.0.0 Ready</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold">SSR & Streaming</h3>
-                            <p class="text-gray-600">Server-Side Rendering out of the box with HTML Streaming for instant Time-To-First-Byte.</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 mb-4">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                            </div>
-                            <h3 class="text-xl font-bold">File-Based Routing</h3>
-                            <p class="text-gray-600">Just create files in <code>src/pages</code>. Dynamic routes, layouts, and API endpoints work automatically.</p>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Code Demo -->
-            <section class="py-20 bg-gray-900 text-white">
-                <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-6">Simple, Elegant API</h2>
-                        <p class="text-gray-400 mb-8 text-lg">
-                            Write standard JavaScript with Template Literals. No compilation step required during development.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-3">
-                                <span class="text-green-400">✓</span> No complex build tools
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="text-green-400">✓</span> Standard ES Modules
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="text-green-400">✓</span> Proxy-based Reactivity
-                            </li>
-                        </ul>
+                </header>
+                <section id="features" class="py-24 bg-white">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 class="text-5xl font-black mb-16 text-center tracking-tight">WHY ZHINNX?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="feature-card border-2 border-black p-8 comic-shadow hover:-translate-y-2 transition-transform duration-300 bg-white">
+                                <div class="w-16 h-16 bg-black text-white flex items-center justify-center text-3xl font-bold mb-6 border-2 border-black">npm</div>
+                                <h3 class="text-2xl font-bold mb-4">NPM Ready</h3>
+                                <p class="text-gray-600 font-medium">Fully modular architecture. Install core, server, or cli independently. Built for the modern ecosystem.</p>
+                            </div>
+                            <div class="feature-card border-2 border-black p-8 comic-shadow hover:-translate-y-2 transition-transform duration-300 bg-white">
+                                <div class="w-16 h-16 bg-white text-black flex items-center justify-center text-3xl font-bold mb-6 border-2 border-black">SSR</div>
+                                <h3 class="text-2xl font-bold mb-4">Streaming SSR</h3>
+                                <p class="text-gray-600 font-medium">Out-of-the-box server-side rendering with HTML streaming. Best-in-class TTFB and SEO.</p>
+                            </div>
+                            <div class="feature-card border-2 border-black p-8 comic-shadow hover:-translate-y-2 transition-transform duration-300 bg-white">
+                                <div class="w-16 h-16 bg-gray-200 text-black flex items-center justify-center text-3xl font-bold mb-6 border-2 border-black">DX</div>
+                                <h3 class="text-2xl font-bold mb-4">Zero Config</h3>
+                                <p class="text-gray-600 font-medium">File-based routing. Zero build steps for dev. Just run node server.js and go.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl font-mono text-sm overflow-x-auto border border-gray-700">
-<pre><code class="language-javascript"><span class="text-purple-400">import</span> { Component, html } <span class="text-purple-400">from</span> 'zhinstack';
-
-<span class="text-purple-400">export default class</span> <span class="text-yellow-400">Counter</span> <span class="text-purple-400">extends</span> <span class="text-yellow-400">Component</span> {
-  <span class="text-blue-400">constructor</span>() {
-    <span class="text-purple-400">super</span>();
-    <span class="text-red-400">this</span>.state = { count: 0 };
-  }
-
-  render() {
-    <span class="text-purple-400">return</span> html\`
-      &lt;button <span class="text-green-400">onClick</span>="\${() => <span class="text-red-400">this</span>.state.count++}"&gt;
-        Count is: \${<span class="text-red-400">this</span>.state.count}
-      &lt;/button&gt;
-    \`;
-  }
-}</code></pre>
+                </section>
+                <section id="install" class="py-24 border-t-2 border-black bg-gray-50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                            <div>
+                                <h2 class="text-5xl font-black mb-8 tracking-tight">START BUILDING.</h2>
+                                <p class="text-xl text-gray-600 mb-8 font-medium">Initialize a new project in seconds.</p>
+                                <div class="bg-black p-6 border-2 border-black comic-shadow relative group">
+                                    <div class="absolute top-0 right-0 p-2">
+                                        <div class="flex gap-2">
+                                            <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+                                            <div class="w-3 h-3 rounded-full bg-gray-500"></div>
+                                        </div>
+                                    </div>
+                                    <code class="font-mono text-white text-lg block mb-4">> npx zhinnx create my-app</code>
+                                    <code class="font-mono text-gray-400 text-lg block mb-4">> cd my-app</code>
+                                    <code class="font-mono text-gray-400 text-lg block">> node server.js</code>
+                                </div>
+                            </div>
+                            <div class="border-2 border-black bg-white p-8 comic-shadow h-full flex flex-col justify-center">
+                                <h3 class="text-2xl font-bold mb-4">Or add to existing project:</h3>
+                                <div class="bg-gray-100 p-4 border-2 border-black mb-4">
+                                    <code class="font-mono text-black">npm install @zhinnx/core @zhinnx/server</code>
+                                </div>
+                                <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </section>
-        </main>
+                </section>
+                <footer class="bg-black text-white py-16 border-t-2 border-black">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <img src="/zhinnx_nobg.png" alt="zhinnx" class="h-16 w-16 mx-auto mb-8 grayscale invert">
+                        <h2 class="text-3xl font-bold mb-8">zhinnx</h2>
+                        <div class="flex justify-center gap-8 mb-8 font-mono text-sm">
+                            <a href="#" class="hover:text-gray-400 hover:underline">Documentation</a>
+                            <a href="https://github.com/zhinnx/zhinnx" class="hover:text-gray-400 hover:underline">GitHub</a>
+                            <a href="#" class="hover:text-gray-400 hover:underline">Twitter</a>
+                        </div>
+                        <p class="text-gray-500 font-mono text-sm">© 2024 zhinnx. MIT License.</p>
+                    </div>
+                </footer>
+            </div>`;
+    }
 
-        <footer class="bg-white border-t border-gray-100 py-12">
-            <div class="container mx-auto px-6 text-center text-gray-500">
-                <p class="mb-4">© 2024 ZhinStack. Released under MIT License.</p>
-                <div class="flex justify-center gap-6">
-                    <a href="#" class="hover:text-blue-600">Twitter</a>
-                    <a href="#" class="hover:text-blue-600">GitHub</a>
-                    <a href="#" class="hover:text-blue-600">Discord</a>
-                </div>
-            </div>
-        </footer>
-      </div>
-    `;
-  }
+    afterRender() {
+        if (typeof gsap !== 'undefined') {
+            gsap.to('.hero-text', { opacity: 1, y: 0, duration: 1, ease: 'steps(10)', delay: 0.2 });
+            gsap.to('.hero-image', { opacity: 1, scale: 1, duration: 1, ease: 'steps(10)', delay: 0.5 });
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: 'top 85%' },
+                    y: 50, opacity: 0, duration: 0.8, delay: i * 0.1, ease: 'steps(8)'
+                });
+            });
+        }
+    }
 }

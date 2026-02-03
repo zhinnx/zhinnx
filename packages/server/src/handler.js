@@ -107,7 +107,15 @@ export async function handleRequest(req, res) {
         }
 
         const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-        const filePath = path.join(ROOT_DIR, safePath);
+        let filePath = path.join(ROOT_DIR, safePath);
+
+        // Check if file exists in root, if not check public/
+        if (!fs.existsSync(filePath)) {
+            const publicPath = path.join(ROOT_DIR, 'public', safePath);
+            if (fs.existsSync(publicPath)) {
+                filePath = publicPath;
+            }
+        }
 
         fs.readFile(filePath, (err, data) => {
             if (err) {

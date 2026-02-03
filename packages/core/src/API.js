@@ -1,5 +1,5 @@
 /**
- * ZhinStack Core - API
+ * zhinnx Core - API
  * A unified wrapper for making API requests.
  */
 

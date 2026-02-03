@@ -1,6 +1,6 @@
 
 /**
- * ZhinStack Lazy Hydration Wrapper
+ * zhinnx Lazy Hydration Wrapper
  */
 import { Component, html } from './Component.js';
 

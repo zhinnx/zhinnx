@@ -6,7 +6,7 @@ export default createHandler(async (req, res) => {
     return {
       status: 'success',
       receivedName: name,
-      message: `Welcome to ZhinStack, ${name || 'Stranger'}!`
+      message: `Welcome to zhinnx, ${name || 'Stranger'}!`
     };
   }
 

@@ -1,5 +1,5 @@
 /**
- * ZhinStack Core - Store
+ * zhinnx Core - Store
  * A lightweight global state management system.
  */
 

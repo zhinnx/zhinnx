@@ -1,8 +1,8 @@
 
-// Verification Script for ZhinStack v2 Performance Features
+// Verification Script for zhinnx v2 Performance Features
 // Streaming, Lazy Hydration (mock), Code Splitting (mock)
 
-console.log('--- Starting ZhinStack v2 Performance Verification ---');
+console.log('--- Starting zhinnx v2 Performance Verification ---');
 
 // --- 1. Mock Environment ---
 const Node = { ELEMENT_NODE: 1, TEXT_NODE: 3 };

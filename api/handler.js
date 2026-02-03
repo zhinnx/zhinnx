@@ -1,5 +1,5 @@
 /**
- * ZhinStack Backend Handler
+ * zhinnx Backend Handler
  * Wraps API functions to provide consistent error handling and response formatting.
  * Compatible with Vercel/Node.js HTTP patterns.
  */

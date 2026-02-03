@@ -1,5 +1,5 @@
 /**
- * ZhinStack Core - Component
+ * zhinnx Core - Component
  * Base class with Reactivity and VDOM integration.
  */
 

@@ -1,0 +1,11 @@
+{
+  "name": "zhinnx",
+  "version": "2.0.0",
+  "description": "CLI tool for zhinnx",
+  "type": "module",
+  "bin": {
+    "zhinnx": "./bin/zhinnx.js"
+  },
+  "keywords": ["zhinnx", "cli", "scaffold"],
+  "license": "MIT"
+}
