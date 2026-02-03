@@ -69,26 +69,25 @@ function walk(node, valMap) {
                  if (part.startsWith(UID)) {
                      return valMap.get(part);
                  } else if (part) {
-                     return part; // plain text
+                     return { text: part }; // plain text normalized to VNode
                  }
                  return null;
              }).filter(n => n !== null);
 
-             // If single item, return it (could be VNode or string)
+             // If single item, return it
              if (nodes.length === 1) return nodes[0];
-             // If multiple, return array? Text nodes usually return raw string in VDOM
-             // But here we might have mixed content.
-             // We'll return a fragment (array) which `h` can't handle directly as a child unless flattened.
-             // But `walk` is called by `walk` which maps children.
              return nodes;
         }
-        return text;
+        return { text };
     }
 
     if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
         // If it's a fragment, just return children
         if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-            const children = Array.from(node.childNodes).map(c => walk(c, valMap)).flat();
+            let children = Array.from(node.childNodes).map(c => walk(c, valMap)).flat();
+            // Normalize strings if any leaked (though walk should handle them now)
+            children = children.map(c => (typeof c === 'string') ? { text: c } : c);
+
             // If the fragment results in a single VNode, return it.
             if (children.length === 1) return children[0];
             return children;
