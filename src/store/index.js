@@ -1,4 +1,4 @@
-import { Store } from '../../zhin-core/Store.js';
+import { Store } from '../../packages/core/index.js';
 
 // Initialize the global store
 const store = new Store({
