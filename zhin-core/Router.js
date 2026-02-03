@@ -5,38 +5,94 @@
 
 export class Router {
   /**
-   * @param {Object} routes - Map of path to Component Class. e.g., { '/': Home, '/about': About }
+   * @param {Object} routeMap - Map of routes from server { '/path': { regex, importPath, params } }
    * @param {HTMLElement} rootElement - The DOM element to render pages into.
    */
-  constructor(routes, rootElement) {
-    this.routes = routes;
+  constructor(routeMap, rootElement) {
+    this.routeMap = routeMap || {};
     this.root = rootElement;
+    this.hydrated = false;
 
-    // Bind navigation event
-    window.addEventListener('hashchange', () => this.resolve());
+    // Use History API for standard routing
+    window.addEventListener('popstate', () => this.resolve());
 
-    // Initial load
-    window.addEventListener('DOMContentLoaded', () => this.resolve());
+    // Initial load - if DOM already loaded (scripts at end of body), resolve immediately
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', () => this.resolve());
+    } else {
+        this.resolve();
+    }
   }
 
   /**
    * Resolve the current route and render the component.
    */
   resolve() {
-    // Basic hash routing (e.g. #/about)
-    // Default to '/' if empty
-    const path = window.location.hash.slice(1) || '/';
+    const path = window.location.pathname || '/';
 
-    // Find matching route
-    const ComponentClass = this.routes[path] || this.routes['404'];
+    // Find matching route using Regex
+    let matchedRoute = null;
+    let params = {};
+    let matchedKey = null;
 
-    if (ComponentClass) {
-      // Clear current content
-      this.root.innerHTML = '';
+    // routeMap keys are simple paths, but values contain regex
+    for (const [key, route] of Object.entries(this.routeMap)) {
+        const re = new RegExp(route.regex);
+        const match = path.match(re);
+        if (match) {
+            matchedKey = key;
+            matchedRoute = route;
+            // Extract params
+            if (route.params) {
+                route.params.forEach((key, index) => {
+                    params[key] = match[index + 1];
+                });
+            }
+            break;
+        }
+    }
 
-      // Instantiate and mount the page component
-      const page = new ComponentClass();
-      page.mount(this.root);
+    if (matchedRoute) {
+      const handleComponent = (ComponentClass) => {
+          const shouldHydrate = this.root.hasChildNodes() && !this.hydrated;
+
+          if (!shouldHydrate) {
+              this.root.innerHTML = '';
+          }
+
+          // Instantiate and mount the page component with Params
+          const page = new ComponentClass({ params });
+          page.mount(this.root);
+
+          this.hydrated = true;
+      };
+
+      // Check if we have the module loaded (client-side mapping)
+      // For file-based routing, `route.importPath` is server-side relative.
+      // Client needs to know how to import it.
+      // We assume `window.__ROUTES__` contains `importFn` or we Map it in `app.js`.
+      // Actually, passing functions in JSON (window.__ROUTES__) is impossible.
+      // So `app.js` must construct the Router with a mapping of `key -> import()`.
+
+      // If `routeMap` passed to constructor has a `loader` property (function), use it.
+      if (matchedRoute.loader) {
+           if (!this.hydrated && !this.root.hasChildNodes()) {
+             this.root.innerHTML = '<div>Loading route...</div>';
+           }
+
+           matchedRoute.loader().then(module => {
+              const Comp = module.default || module;
+              handleComponent(Comp);
+           }).catch(err => {
+              console.error('Route Loading Error', err);
+              this.root.innerHTML = '<h1>Error Loading Page</h1>';
+           });
+      } else {
+          // Fallback or Error
+          console.error('Route found but no loader defined on client:', matchedKey);
+          this.root.innerHTML = '<h1>Error: Route Configuration Missing</h1>';
+      }
+
     } else {
       this.root.innerHTML = '<h1>404 - Page Not Found</h1>';
     }
@@ -47,6 +103,7 @@ export class Router {
    * @param {string} path
    */
   navigate(path) {
-    window.location.hash = path;
+    window.history.pushState({}, '', path);
+    this.resolve();
   }
 }

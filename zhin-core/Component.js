@@ -1,87 +1,117 @@
 /**
  * ZhinStack Core - Component
- * The base class for all UI components.
+ * Base class with Reactivity and VDOM integration.
  */
 
-export const html = (strings, ...values) => {
-  return strings.reduce((result, string, i) => {
-    const val = values[i];
-    // Simple array handling for lists
-    const strValue = Array.isArray(val) ? val.join('') : (val !== undefined && val !== null ? val : '');
-    return result + string + strValue;
-  }, '');
-};
+import { reactive, effect } from './reactive.js';
+import { html } from './vdom.js';
+import { diffChildren, unmount, hydrate } from './diff.js';
+
+export { html };
 
 export class Component {
-  constructor(props = {}) {
-    this.props = props;
-    this.state = {};
-    this.container = null;
-    this._mountCallback = null;
-  }
+    constructor(props = {}) {
+        this.props = props;
+        this.state = reactive({});
+        this.isMounted = false;
 
-  /**
-   * Update the state and trigger a re-render.
-   * @param {Object} newState
-   */
-  setState(newState) {
-    this.state = { ...this.state, ...newState };
-    this.update();
-  }
+        // Internal
+        this._container = null;
+        this._vnodes = []; // Supports Fragments (multiple roots)
+        this._updateEffect = null;
+    }
 
-  /**
-   * Lifecycle hook called after the component is mounted to the DOM.
-   */
-  onMount() {}
+    /**
+     * Override to return VNodes.
+     */
+    render() {
+        return html`<div></div>`;
+    }
 
-  /**
-   * Lifecycle hook called before the component is unmounted.
-   */
-  onUnmount() {}
+    /**
+     * Mounts the component to a DOM element.
+     */
+    mount(container) {
+        if (this.isMounted) return;
+        this._container = container;
 
-  /**
-   * The render method should return an HTML string.
-   * Use the html`` tagged template literal.
-   */
-  render() {
-    return html`<div></div>`;
-  }
+        // Check for Hydration Need (SSR Content Present)
+        // Only hydrate if we haven't mounted yet and container has children
+        const shouldHydrate = !this.isMounted && container.hasChildNodes();
 
-  /**
-   * Internal method to mount the component to a DOM element.
-   * @param {HTMLElement} element
-   */
-  mount(element) {
-    this.container = element;
-    this.update();
-    this.onMount();
-  }
+        // Reactive update loop
+        this._updateEffect = effect(() => {
+            // If it's the first run and shouldHydrate is true, run hydration
+            // Note: In effect, this runs immediately.
+            if (shouldHydrate && !this.isMounted) {
+                this.hydrate();
+            } else {
+                this.update();
+            }
+        });
 
-  /**
-   * Internal method to update the DOM.
-   */
-  update() {
-    if (!this.container) return;
+        this.isMounted = true;
+        this.onMount();
+    }
 
-    // In a full implementation, this would use a VDOM diff.
-    // For ZhinStack V1, we use direct innerHTML replacement for simplicity
-    // and maximum compatibility with standard CSS/Tailwind.
-    this.container.innerHTML = this.render();
+    hydrate() {
+        if (!this._container) return;
+        const rendered = this.render();
+        const newVNodes = Array.isArray(rendered) ? rendered : [rendered];
 
-    // Re-bind events if necessary (or rely on delegated events in the App)
-    this.afterRender();
-  }
+        // Hydrate logic in diff.js
+        hydrate(newVNodes, this._container);
 
-  /**
-   * Called immediately after render. Useful for binding DOM events manually
-   * if not using delegated events.
-   */
-  afterRender() {}
+        this._vnodes = newVNodes;
+        this.afterRender();
+    }
 
-  /**
-   * Helper to find an element within this component
-   */
-  $(selector) {
-      return this.container ? this.container.querySelector(selector) : null;
-  }
+    /**
+     * Force update (automatically called by reactive state).
+     */
+    update() {
+        if (!this._container) return;
+
+        const rendered = this.render();
+        // Normalize to array to support Fragments (multiple root nodes)
+        const newVNodes = Array.isArray(rendered) ? rendered : [rendered];
+
+        // Use diffChildren to reconcile the container's content
+        diffChildren(this._vnodes, newVNodes, this._container);
+
+        this._vnodes = newVNodes;
+
+        // Lifecycle
+        this.afterRender();
+    }
+
+    unmount() {
+        if (!this.isMounted) return;
+
+        this._vnodes.forEach(vnode => unmount(vnode));
+        this._vnodes = [];
+        this.isMounted = false;
+        this.onUnmount();
+    }
+
+    /**
+     * Legacy State Support
+     */
+    setState(newState) {
+        Object.assign(this.state, newState);
+    }
+
+    /**
+     * Lifecycle Hooks
+     */
+    onMount() {}
+    onUnmount() {}
+    afterRender() {}
+
+    /**
+     * Helper
+     */
+    $(selector) {
+        return this._container ? this._container.querySelector(selector) : null;
+    }
 }
