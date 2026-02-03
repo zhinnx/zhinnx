@@ -123,6 +123,17 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Import Map for Bare Modules -->
+    <script type="importmap">
+    {
+        "imports": {
+            "zhinnx-core": "/node_modules/zhinnx-core/index.js",
+            "zhinnx-server": "/node_modules/zhinnx-server/index.js"
+        }
+    }
+    </script>
+
     <title>${escapeHtml(title)}</title>
     ${scripts}
     <meta name="description" content="${escapeHtml(description)}">

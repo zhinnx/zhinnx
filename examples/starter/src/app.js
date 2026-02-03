@@ -1,21 +1,28 @@
-import { Router } from '../zhinnx.js';
+import { Router } from 'zhinnx-core';
 
-// Get routes injected by server
-const routes = window.__ROUTES__ || {};
-const routeMap = {};
+// We rely on window.__ROUTES__ injected by the server.
+const serverRoutes = window.__ROUTES__ || {};
+const clientRoutes = {};
 
-// Transform for client-side usage
-Object.keys(routes).forEach(key => {
-    const route = routes[key];
-    // Convert importPath (./src/...) to absolute (/src/...)
-    const path = route.importPath.replace(/^\./, '');
+// Helper to dynamically import pages
+const importPage = (path) => {
+    // path comes from server scan, e.g., "./src/pages/Home.js"
+    // Remove leading dot to make it absolute for the browser
+    const cleanPath = path.replace(/^\./, '');
+    return import(cleanPath);
+};
 
-    routeMap[key] = {
+// Transform server route map to client route map
+for (const [key, route] of Object.entries(serverRoutes)) {
+    clientRoutes[key] = {
         ...route,
-        loader: () => import(path)
+        loader: () => importPage(route.importPath)
     };
-});
+}
 
-const app = document.getElementById('app');
-// Initialize Router
-new Router(routeMap, app);
+const rootElement = document.getElementById('app');
+if (rootElement) {
+    new Router(clientRoutes, rootElement);
+} else {
+    console.error('Root element #app not found');
+}

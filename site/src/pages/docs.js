@@ -9,9 +9,7 @@ export default class DocsPage extends Component {
 
     constructor() {
         super();
-        this.state = {
-            mobileMenuOpen: false
-        };
+        this.state.mobileMenuOpen = false;
     }
 
     toggleMenu() {
@@ -37,12 +35,13 @@ export default class DocsPage extends Component {
                                 <a href="/#features" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Features</a>
                                 <a href="/#philosophy" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Philosophy</a>
                                 <a href="/docs" class="bg-black text-white px-6 py-2 font-bold comic-shadow hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all border-2 border-black">Docs</a>
+                                <a href="/docs#tutorial" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Tutorial</a>
                                 <a href="https://github.com/zhinnx/zhinnx" class="text-black font-bold hover:underline decoration-2 underline-offset-4">GitHub</a>
                             </div>
 
                             <!-- Mobile Menu Button -->
                             <div class="md:hidden">
-                                <button id="menu-btn" onclick="${() => this.toggleMenu()}" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
+                                <button id="menu-btn" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${this.state.mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}" />
                                     </svg>
@@ -57,6 +56,7 @@ export default class DocsPage extends Component {
                             <a href="/" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Home</a>
                             <a href="/#features" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Features</a>
                             <a href="/docs" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Documentation</a>
+                            <a href="/docs#tutorial" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Tutorial</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50">GitHub</a>
                         </div>
                     </div>
@@ -80,6 +80,12 @@ export default class DocsPage extends Component {
                                     <li><a href="#components" class="text-gray-600 hover:text-black hover:underline">Components</a></li>
                                     <li><a href="#routing" class="text-gray-600 hover:text-black hover:underline">Routing</a></li>
                                     <li><a href="#state" class="text-gray-600 hover:text-black hover:underline">State Management</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2 uppercase tracking-wide">Tutorial</h3>
+                                <ul class="space-y-2">
+                                    <li><a href="#tutorial" class="text-gray-600 hover:text-black hover:underline">Build a Counter</a></li>
                                 </ul>
                             </div>
                             <div>
@@ -116,7 +122,7 @@ export default class DocsPage extends Component {
 
                             <p class="mb-4">Alternatively, you can install zhinnx into an existing project via npm:</p>
                              <div class="bg-gray-100 text-black p-4 border-2 border-black mb-12">
-                                <code class="font-mono">npm install @zhinnx/core @zhinnx/server</code>
+                                <code class="font-mono">npm install zhinnx-core zhinnx-server</code>
                             </div>
 
                             <hr class="border-2 border-black my-12" />
@@ -140,13 +146,13 @@ export default class DocsPage extends Component {
 
                             <div class="bg-gray-50 border-2 border-black p-6 mb-8 overflow-x-auto">
 <pre class="font-mono text-sm">
-import { Component, html } from '@zhinnx/core';
+import { Component, html } from 'zhinnx-core';
 
 export class Counter extends Component {
   constructor() {
     super();
     // Reactive state
-    this.state = { count: 0 };
+    this.state.count = 0;
   }
 
   increment() {
@@ -180,12 +186,103 @@ export class Counter extends Component {
                                 <li><code>src/pages/users/[id].js</code> → <code>/users/:id</code> (Dynamic Route)</li>
                             </ul>
 
+                            <hr class="border-2 border-black my-12" />
+
+                            <h2 id="state" class="text-4xl font-bold mb-6">State Management</h2>
+                            <p class="mb-6">State management in zhinnx is powered by JS Proxies. This means you can simply mutate state properties, and the UI will update automatically.</p>
+                            <p class="mb-6">There is no need for <code>useState</code> hooks or complex reducers. Just assign values to <code>this.state</code>.</p>
+
                              <hr class="border-2 border-black my-12" />
+
+                            <h2 id="tutorial" class="text-4xl font-bold mb-6">Tutorial: Build a Counter</h2>
+                            <p class="mb-6">Let's build a simple interactive Counter app to demonstrate how easy it is to work with zhinnx.</p>
+
+                            <h3 class="text-2xl font-bold mb-4">Step 1: Create the Page</h3>
+                            <p class="mb-4">Create a new file at <code>src/pages/counter.js</code>.</p>
+
+                            <div class="bg-gray-50 border-2 border-black p-6 mb-8 overflow-x-auto">
+<pre class="font-mono text-sm">
+import { Component, html } from 'zhinnx-core';
+
+export default class CounterPage extends Component {
+    static meta = {
+        title: 'Counter App',
+        description: 'A simple counter built with zhinnx'
+    }
+
+    constructor() {
+        super();
+        this.state.count = 0;
+    }
+
+    increase() {
+        this.state.count++;
+    }
+
+    decrease() {
+        this.state.count--;
+    }
+
+    render() {
+        return html\`
+            &lt;div class="p-10 text-center"&gt;
+                &lt;h1 class="text-4xl font-bold mb-6"&gt;Counter&lt;/h1&gt;
+
+                &lt;div class="text-6xl font-black mb-8"&gt;
+                    \${this.state.count}
+                &lt;/div&gt;
+
+                &lt;div class="flex justify-center gap-4"&gt;
+                    &lt;button class="bg-red-500 text-white px-6 py-3 font-bold border-2 border-black comic-shadow active:translate-y-1 active:shadow-none"
+                            onclick="\${() => this.decrease()}"&gt;
+                        Decrease
+                    &lt;/button&gt;
+
+                    &lt;button class="bg-green-500 text-white px-6 py-3 font-bold border-2 border-black comic-shadow active:translate-y-1 active:shadow-none"
+                            onclick="\${() => this.increase()}"&gt;
+                        Increase
+                    &lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;div class="mt-8"&gt;
+                    &lt;a href="/" class="underline font-bold"&gt;Back to Home&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        \`;
+    }
+}
+</pre>
+                            </div>
+
+                            <h3 class="text-2xl font-bold mb-4">Step 2: Run and Test</h3>
+                            <p class="mb-4">Save the file. Your server should be running (<code>node server.js</code>). If not, start it.</p>
+                            <p class="mb-4">Navigate to <a href="http://localhost:3000/counter" class="text-blue-600 underline">http://localhost:3000/counter</a>.</p>
+                            <p class="mb-12">You should see your counter app working! The state updates instantly when you click buttons.</p>
+
+                            <hr class="border-2 border-black my-12" />
 
                             <h2 id="ssr" class="text-4xl font-bold mb-6">SSR & Streaming</h2>
                             <p class="mb-6">Server-Side Rendering (SSR) is enabled by default. zhinnx takes this a step further with <strong>HTML Streaming</strong>.</p>
                             <p class="mb-6">When a request comes in, the server immediately sends the document head and starts streaming the body as it renders. This ensures the browser can start loading CSS, JS, and fonts immediately, resulting in superior performance metrics.</p>
-                            <p class="mb-12">This happens automatically in <code>server.js</code> via the <code>@zhinnx/server</code> package. No configuration is needed.</p>
+                            <p class="mb-12">This happens automatically in <code>server.js</code> via the <code>zhinnx-server</code> package. No configuration is needed.</p>
+
+                            <hr class="border-2 border-black my-12" />
+
+                            <h2 id="api" class="text-4xl font-bold mb-6">API Routes</h2>
+                            <p class="mb-6">You can create backend API endpoints just by adding files to the <code>api/</code> folder.</p>
+                            <div class="bg-gray-50 border-2 border-black p-6 mb-8 overflow-x-auto">
+<pre class="font-mono text-sm">
+// api/hello.js
+import { createHandler } from 'zhinnx-server';
+
+export default createHandler(async (req, res) => {
+    return {
+        message: "Hello from the API!",
+        timestamp: Date.now()
+    };
+});
+</pre>
+                            </div>
 
                         </div>
                     </main>
@@ -208,5 +305,8 @@ export class Counter extends Component {
         `;
     }
 
-    afterRender() {}
+    afterRender() {
+        const btn = this.$('#menu-btn');
+        if (btn) btn.onclick = () => this.toggleMenu();
+    }
 }

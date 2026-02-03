@@ -9,9 +9,7 @@ export default class LandingPage extends Component {
 
     constructor() {
         super();
-        this.state = {
-            mobileMenuOpen: false
-        };
+        this.state.mobileMenuOpen = false;
     }
 
     toggleMenu() {
@@ -35,12 +33,13 @@ export default class LandingPage extends Component {
                                 <a href="#features" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Features</a>
                                 <a href="#philosophy" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Philosophy</a>
                                 <a href="/docs" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Documentation</a>
+                                <a href="/docs#tutorial" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Tutorial</a>
                                 <a href="https://github.com/zhinnx/zhinnx" class="text-black font-bold hover:underline decoration-2 underline-offset-4">GitHub</a>
                             </div>
 
                             <!-- Mobile Menu Button -->
                             <div class="md:hidden">
-                                <button id="menu-btn" onclick="${() => this.toggleMenu()}" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
+                                <button id="menu-btn" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${this.state.mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}" />
                                     </svg>
@@ -55,6 +54,7 @@ export default class LandingPage extends Component {
                             <a href="#features" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Features</a>
                             <a href="#philosophy" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Philosophy</a>
                             <a href="/docs" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Documentation</a>
+                            <a href="/docs#tutorial" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Tutorial</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50">GitHub</a>
                         </div>
                     </div>
@@ -108,7 +108,7 @@ export default class LandingPage extends Component {
                                 <div>
                                     <h3 class="text-3xl font-bold mb-4">Native NPM Integration</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        zhinnx is not a walled garden. It is built as a set of modular packages (@zhinnx/core, @zhinnx/server) that you can install individually or together. This means you can drop zhinnx components into an existing project or build a new one from scratch using standard tools.
+                                        zhinnx is not a walled garden. It is built as a set of modular packages (zhinnx-core, zhinnx-server) that you can install individually or together. This means you can drop zhinnx components into an existing project or build a new one from scratch using standard tools.
                                     </p>
                                     <p class="text-lg text-gray-700 leading-relaxed">
                                         Unlike other frameworks that require specific CLI tools or global installations to function, zhinnx lives entirely in your <code>package.json</code>. This guarantees long-term stability and compatibility with the vast JavaScript ecosystem.
@@ -183,11 +183,12 @@ export default class LandingPage extends Component {
                                     <code class="font-mono text-gray-400 text-lg block mb-4">> cd my-app</code>
                                     <code class="font-mono text-gray-400 text-lg block">> node server.js</code>
                                 </div>
+                                <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
                             </div>
                             <div class="border-2 border-black bg-white p-8 comic-shadow h-full flex flex-col justify-center">
                                 <h3 class="text-2xl font-bold mb-4">Or add to existing project:</h3>
                                 <div class="bg-gray-100 p-4 border-2 border-black mb-4">
-                                    <code class="font-mono text-black">npm install @zhinnx/core @zhinnx/server</code>
+                                    <code class="font-mono text-black">npm install zhinnx-core zhinnx-server</code>
                                 </div>
                                 <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
                             </div>
@@ -212,5 +213,27 @@ export default class LandingPage extends Component {
         `;
     }
 
-    afterRender() {}
+    afterRender() {
+        const btn = this.$('#menu-btn');
+        if (btn) btn.onclick = () => this.toggleMenu();
+
+        if (window.gsap) {
+            window.gsap.from(".hero-text > *", {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.2
+            });
+
+            window.gsap.from(".hero-image", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                ease: "elastic.out(1, 0.75)",
+                delay: 0.5
+            });
+        }
+    }
 }

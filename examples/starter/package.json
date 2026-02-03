@@ -1,10 +1,13 @@
 {
-  "name": "zhinnx-starter",
+  "name": "starter",
   "version": "1.0.0",
   "type": "module",
-  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
   "dependencies": {
-    "@zhinnx/core": "file:../../packages/core",
-    "@zhinnx/server": "file:../../packages/server"
+    "zhinnx-core": "file:../../packages/core",
+    "zhinnx-server": "file:../../packages/server"
   }
 }

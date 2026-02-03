@@ -75,7 +75,7 @@ graph TD
 
 ## Request Flow
 
-1. **Incoming Request:** `handleRequest` in `@zhinnx/server` intercepts.
+1. **Incoming Request:** `handleRequest` in `zhinnx-server` intercepts.
 2. **Route Matching:** Scans `src/pages` for matching file.
 3. **Rendering:**
    - Instantiates Page Component.
