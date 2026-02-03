@@ -1,4 +1,4 @@
-import { Router } from '../zhin-core/Router.js';
+import { Router } from '../packages/core/index.js';
 
 // We rely on window.__ROUTES__ injected by the server.
 // However, the import paths in __ROUTES__ are relative to SERVER root (e.g. ./src/pages/Home.js).

@@ -1,4 +1,4 @@
-import { Component, html } from '../../zhin-core/Component.js';
+import { Component, html } from '../../packages/core/index.js';
 import store from '../store/index.js';
 
 export class Counter extends Component {

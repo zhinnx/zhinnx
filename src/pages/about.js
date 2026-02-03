@@ -1,6 +1,6 @@
-import { Component, html } from '../../zhin-core/Component.js';
+import { Component, html } from '../../packages/core/index.js';
 import { Header } from '../components/Header.js';
-import api from '../../zhin-core/API.js';
+import api from '../../packages/core/index.js';
 
 export class About extends Component {
   constructor() {
