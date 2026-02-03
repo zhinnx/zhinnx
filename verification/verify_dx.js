@@ -25,17 +25,11 @@ async function runTests() {
     }
 
     // --- Test 1: Route Scanning Logic (Mocking scanRoutes) ---
-    // We can't import scanRoutes easily because it's not exported from server.js (unless we export it).
-    // I exported it in Step 2.
-    // NOTE: Importing server.js starts the server!
+    // We import from zhin-core/handler.js which does NOT start the server automatically.
 
     console.log('\nTesting Route Scanning...');
-    const serverModule = await import('../server.js');
-    // server.js starts on port 3000. We should close it if possible, but it's not exported.
-    // This is why verify_dx.js times out/hangs.
-    // For verify purposes, we accept it hangs and manually exit process.
-
-    const { ROUTE_MAP } = serverModule;
+    const handlerModule = await import('../zhin-core/handler.js');
+    const { ROUTE_MAP } = handlerModule;
 
     // Check if ROUTE_MAP exists
     assert(ROUTE_MAP, 'ROUTE_MAP exported from server.js');

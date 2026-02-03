@@ -129,12 +129,15 @@ async function runTests() {
 
     let routeLoaded = false;
     const routes = {
-        '/lazy': () => new Promise(resolve => {
-            routeLoaded = true;
-            resolve(class RouteComp extends Component {
-                render() { return { tag: 'div', props: {}, children: ['Route'] }; } // Return VNode directly
-            });
-        })
+        '/lazy': {
+            loader: () => new Promise(resolve => {
+                routeLoaded = true;
+                resolve(class RouteComp extends Component {
+                    render() { return { tag: 'div', props: {}, children: [{text: 'Route'}] }; } // Return VNode directly
+                });
+            }),
+            regex: '^/lazy$' // Add regex for matching
+        }
     };
 
     // Mock root for Router
