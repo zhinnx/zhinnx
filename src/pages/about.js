@@ -28,7 +28,7 @@ export class About extends Component {
     return html`
       <div id="header-slot"></div>
       <main class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">About ZhinStack</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">About zhinnx</h1>
 
         <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6">
             <h3 class="font-bold text-indigo-700">Backend Integration Test</h3>
@@ -37,7 +37,7 @@ export class About extends Component {
         </div>
 
         <p class="text-gray-700 leading-relaxed max-w-2xl">
-            ZhinStack is designed to bridge the gap between simple static sites and complex single-page applications.
+            zhinnx is designed to bridge the gap between simple static sites and complex single-page applications.
             It offers a familiar component model without the massive overhead of larger frameworks.
         </p>
       </main>

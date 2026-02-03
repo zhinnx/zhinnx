@@ -10,7 +10,7 @@ def run():
         page.goto("http://localhost:3000")
 
         # Wait for content
-        expect(page.locator("h1")).to_contain_text("Welcome to ZhinStack")
+        expect(page.locator("h1")).to_contain_text("Welcome to zhinnx")
 
         # Test Interaction (Counter)
         print("Testing Counter...")
@@ -29,11 +29,11 @@ def run():
         page.click("text=About")
 
         # Wait for routing
-        expect(page.locator("h1")).to_contain_text("About ZhinStack")
+        expect(page.locator("h1")).to_contain_text("About zhinnx")
 
-        # Wait for API message (should be "Hello from ZhinStack!")
+        # Wait for API message (should be "Hello from zhinnx!")
         # It initially says "Loading data from backend..." then updates.
-        expect(page.locator(".font-mono")).to_contain_text("Hello from ZhinStack!")
+        expect(page.locator(".font-mono")).to_contain_text("Hello from zhinnx!")
 
         page.screenshot(path="verification/about.png")
         print("About screenshot taken.")

@@ -1,9 +1,9 @@
-# ZhinStack - Modern Lightweight Web Architecture
+# zhinnx - Modern Lightweight Web Architecture
 
 ## 1. Gambaran Umum (Overview)
-**ZhinStack** adalah tech stack web modern yang dirancang untuk developer yang menginginkan kekuatan arsitektur berbasis komponen (seperti React) tetapi tanpa kompleksitas build tools yang berat (seperti Webpack/Vite) dan boilerplate yang berlebihan.
+**zhinnx** adalah tech stack web modern yang dirancang untuk developer yang menginginkan kekuatan arsitektur berbasis komponen (seperti React) tetapi tanpa kompleksitas build tools yang berat (seperti Webpack/Vite) dan boilerplate yang berlebihan.
 
-ZhinStack menjembatani kesenjangan antara Vanilla JS dan Framework modern. Ia memanfaatkan fitur standar JavaScript (ES6 Modules, Classes, Template Literals, Proxy) untuk menciptakan pengalaman pengembangan yang cepat, ringan, dan berskala Enterprise.
+zhinnx menjembatani kesenjangan antara Vanilla JS dan Framework modern. Ia memanfaatkan fitur standar JavaScript (ES6 Modules, Classes, Template Literals, Proxy) untuk menciptakan pengalaman pengembangan yang cepat, ringan, dan berskala Enterprise.
 
 ## 2. Filosofi Inti (Core Philosophy)
 *   **Zero-Magic**: Tidak ada kompilasi tersembunyi. Kode yang Anda tulis adalah kode yang dijalankan browser.
@@ -25,7 +25,7 @@ Menggunakan pola **Serverless Functions**.
 *   Wrapper `handler` menstandarisasi Request/Response, membuatnya kompatibel dengan Node.js biasa maupun Vercel/AWS Lambda.
 
 ## 4. Struktur Folder (Directory Structure)
-Struktur ZhinStack dirancang untuk skalabilitas:
+Struktur zhinnx dirancang untuk skalabilitas:
 
 ```
 /
@@ -37,7 +37,7 @@ Struktur ZhinStack dirancang untuk skalabilitas:
 │   ├── pages/          # Komponen Halaman (Route targets)
 │   ├── store/          # State management global
 │   └── app.js          # Entry point aplikasi
-├── zhin-core/          # Inti Framework (Library ZhinStack)
+├── packages/core/          # Inti Framework (Library zhinnx)
 │   ├── Component.js    # Base class komponen
 │   ├── Router.js       # Routing logic
 │   ├── Store.js        # State management logic
@@ -48,10 +48,10 @@ Struktur ZhinStack dirancang untuk skalabilitas:
 ```
 
 ## 5. Contoh Komponen Frontend
-Komponen di ZhinStack adalah ES6 Class yang mewarisi `Component`.
+Komponen di zhinnx adalah ES6 Class yang mewarisi `Component`.
 
 ```javascript
-import { Component, html } from '../../zhin-core/Component.js';
+import { Component, html } from '../../packages/core/Component.js';
 
 export class UserCard extends Component {
   constructor() {
@@ -82,11 +82,11 @@ export class UserCard extends Component {
 ```
 
 ## 6. State Management
-ZhinStack menggunakan pola **Store** terpusat yang sangat sederhana.
+zhinnx menggunakan pola **Store** terpusat yang sangat sederhana.
 
 ```javascript
 // store/index.js
-import { Store } from '../../zhin-core/Store.js';
+import { Store } from '../../packages/core/Store.js';
 
 export default new Store({
   user: null,
@@ -128,7 +128,7 @@ export default createHandler(async (req, res) => {
 ```
 
 ## 8. Integrasi Styling
-ZhinStack agnostik terhadap CSS, namun sangat cocok dengan **Tailwind CSS** karena penggunaan Template Literals.
+zhinnx agnostik terhadap CSS, namun sangat cocok dengan **Tailwind CSS** karena penggunaan Template Literals.
 
 ```javascript
 render() {
@@ -141,7 +141,7 @@ render() {
 ```
 
 ## 9. Fleksibilitas dan Skalabilitas
-*   **Fleksibel**: Inti framework (`zhin-core`) kurang dari 200 baris kode. Anda bisa memodifikasinya sesuai kebutuhan tim.
+*   **Fleksibel**: Inti framework (`packages/core`) kurang dari 200 baris kode. Anda bisa memodifikasinya sesuai kebutuhan tim.
 *   **Skalabel**: Struktur folder memisahkan logic (`api`), view (`components`), dan data (`store`). Saat aplikasi membesar, pola ini mencegah "Spaghetti Code".
 
 ## 10. Best Practices

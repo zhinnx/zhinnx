@@ -106,8 +106,8 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     const page = new PageComponent(props);
     const meta = PageComponent.meta || {};
     const title = meta.title || 'Zhinnx App';
-    const description = meta.description || 'Built with Zhinnx';
-    const image = meta.image || '/home.png';
+    const description = meta.description || 'Built with zhinnx';
+    const image = meta.image || '/zhinnx_nobg.png';
 
     // We use an async iterator approach wrapped in a Readable
     const iterator = (async function* () {
@@ -145,8 +145,24 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
 
     <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .comic-border { border: 2px solid #000000; }
+        .comic-border-t { border-top: 2px solid #000000; }
+        .comic-border-b { border-bottom: 2px solid #000000; }
+        .comic-border-r { border-right: 2px solid #000000; }
+        .comic-shadow { box-shadow: 4px 4px 0px 0px #000000; }
+        .comic-shadow-sm { box-shadow: 2px 2px 0px 0px #000000; }
+        .comic-shadow-hover:hover { box-shadow: 6px 6px 0px 0px #000000; transform: translate(-2px, -2px); }
+        .comic-shadow-active:active { box-shadow: 2px 2px 0px 0px #000000; transform: translate(2px, 2px); }
+        ::selection { background-color: #000; color: #fff; }
     </style>
 
     <!-- JSON-LD -->

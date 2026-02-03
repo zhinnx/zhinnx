@@ -1,8 +1,13 @@
 {
-  "name": "zhinstack-demo",
-  "version": "1.0.0",
-  "description": "Demo project for ZhinStack",
+  "name": "zhinnx-monorepo",
+  "version": "2.0.0",
+  "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "site",
+    "examples/*"
+  ],
   "scripts": {
     "start": "node server.js"
   }

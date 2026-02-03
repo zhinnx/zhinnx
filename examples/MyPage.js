@@ -5,7 +5,7 @@ export default class MyPage extends Component {
     // SEO Metadata
     static meta = {
         title: 'My Example Page',
-        description: 'This is an example page in ZhinStack.'
+        description: 'This is an example page in zhinnx.'
     };
 
     render() {

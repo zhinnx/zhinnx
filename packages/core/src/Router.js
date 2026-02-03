@@ -1,5 +1,5 @@
 /**
- * ZhinStack Core - Router
+ * zhinnx Core - Router
  * specific Simple client-side routing.
  */
 

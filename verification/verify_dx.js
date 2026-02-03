@@ -1,7 +1,7 @@
 
-// Verification Script for ZhinStack v2 DX (File-Based Routing)
+// Verification Script for zhinnx v2 DX (File-Based Routing)
 
-console.log('--- Starting ZhinStack v2 DX Verification ---');
+console.log('--- Starting zhinnx v2 DX Verification ---');
 
 import path from 'path';
 import fs from 'fs';
