@@ -9,9 +9,7 @@ export default class LandingPage extends Component {
 
     constructor() {
         super();
-        this.state = {
-            mobileMenuOpen: false
-        };
+        this.state.mobileMenuOpen = false;
     }
 
     toggleMenu() {
@@ -35,12 +33,13 @@ export default class LandingPage extends Component {
                                 <a href="#features" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Features</a>
                                 <a href="#philosophy" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Philosophy</a>
                                 <a href="/docs" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Documentation</a>
+                                <a href="/docs#tutorial" class="text-black font-bold hover:underline decoration-2 underline-offset-4">Tutorial</a>
                                 <a href="https://github.com/zhinnx/zhinnx" class="text-black font-bold hover:underline decoration-2 underline-offset-4">GitHub</a>
                             </div>
 
                             <!-- Mobile Menu Button -->
                             <div class="md:hidden">
-                                <button id="menu-btn" onclick="${() => this.toggleMenu()}" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
+                                <button id="menu-btn" class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none">
                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${this.state.mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}" />
                                     </svg>
@@ -55,6 +54,7 @@ export default class LandingPage extends Component {
                             <a href="#features" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Features</a>
                             <a href="#philosophy" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Philosophy</a>
                             <a href="/docs" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Documentation</a>
+                            <a href="/docs#tutorial" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Tutorial</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50">GitHub</a>
                         </div>
                     </div>
@@ -213,6 +213,9 @@ export default class LandingPage extends Component {
     }
 
     afterRender() {
+        const btn = this.$('#menu-btn');
+        if (btn) btn.onclick = () => this.toggleMenu();
+
         if (window.gsap) {
             window.gsap.from(".hero-text > *", {
                 y: 50,
