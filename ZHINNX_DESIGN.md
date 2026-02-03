@@ -37,7 +37,7 @@ Struktur zhinnx dirancang untuk skalabilitas:
 │   ├── pages/          # Komponen Halaman (Route targets)
 │   ├── store/          # State management global
 │   └── app.js          # Entry point aplikasi
-├── zhin-core/          # Inti Framework (Library zhinnx)
+├── packages/core/          # Inti Framework (Library zhinnx)
 │   ├── Component.js    # Base class komponen
 │   ├── Router.js       # Routing logic
 │   ├── Store.js        # State management logic
@@ -51,7 +51,7 @@ Struktur zhinnx dirancang untuk skalabilitas:
 Komponen di zhinnx adalah ES6 Class yang mewarisi `Component`.
 
 ```javascript
-import { Component, html } from '../../zhin-core/Component.js';
+import { Component, html } from '../../packages/core/Component.js';
 
 export class UserCard extends Component {
   constructor() {
@@ -86,7 +86,7 @@ zhinnx menggunakan pola **Store** terpusat yang sangat sederhana.
 
 ```javascript
 // store/index.js
-import { Store } from '../../zhin-core/Store.js';
+import { Store } from '../../packages/core/Store.js';
 
 export default new Store({
   user: null,
@@ -141,7 +141,7 @@ render() {
 ```
 
 ## 9. Fleksibilitas dan Skalabilitas
-*   **Fleksibel**: Inti framework (`zhin-core`) kurang dari 200 baris kode. Anda bisa memodifikasinya sesuai kebutuhan tim.
+*   **Fleksibel**: Inti framework (`packages/core`) kurang dari 200 baris kode. Anda bisa memodifikasinya sesuai kebutuhan tim.
 *   **Skalabel**: Struktur folder memisahkan logic (`api`), view (`components`), dan data (`store`). Saat aplikasi membesar, pola ini mencegah "Spaghetti Code".
 
 ## 10. Best Practices

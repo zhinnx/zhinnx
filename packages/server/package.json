@@ -8,7 +8,7 @@
     ".": "./index.js"
   },
   "dependencies": {
-    "@zhinnx/core": "workspace:*"
+    "@zhinnx/core": "^2.0.0"
   },
   "keywords": ["zhinnx", "server", "ssr"],
   "license": "MIT"
