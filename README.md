@@ -21,6 +21,7 @@ Zhinnx is built for developers who want the power of React/Next.js but the simpl
 ```bash
 npx zhinnx create my-app
 cd my-app
+npm install
 node server.js
 ```
 
@@ -28,17 +29,17 @@ node server.js
 
 1. Install:
    ```bash
-   npm install zhinnx
+   npm install @zhinnx/core @zhinnx/server
    ```
 2. Create `server.js`:
    ```javascript
-   import { handleRequest } from 'zhinnx-server';
+   import { handleRequest } from '@zhinnx/server';
    import http from 'http';
    http.createServer(handleRequest).listen(3000);
    ```
 3. Create `src/pages/index.js`:
    ```javascript
-   import { Component, html } from 'zhinnx-core';
+   import { Component, html } from '@zhinnx/core';
    export default class Page extends Component {
      render() { return html`<h1>Hello World</h1>`; }
    }
@@ -46,7 +47,7 @@ node server.js
 
 ## Documentation
 
-See [ZHINNX_ARCHITECTURE.md](./ZHINNX_ARCHITECTURE.md) for deep dive.
+See the [Official Website](http://localhost:3000/docs) or [ZHINNX_ARCHITECTURE.md](./ZHINNX_ARCHITECTURE.md) for deep dive.
 
 ## License
 

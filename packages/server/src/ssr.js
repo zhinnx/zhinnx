@@ -4,7 +4,7 @@
  * Server-Side Rendering with Streaming Support
  */
 
-import { Component } from '../../core/index.js';
+import { Component } from '@zhinnx/core';
 import { Readable } from 'stream';
 
 function escapeHtml(text) {
@@ -128,8 +128,8 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     <script type="importmap">
     {
         "imports": {
-            "zhinnx-core": "/node_modules/zhinnx-core/index.js",
-            "zhinnx-server": "/node_modules/zhinnx-server/index.js"
+            "@zhinnx/core": "/node_modules/@zhinnx/core/index.js",
+            "@zhinnx/server": "/node_modules/@zhinnx/server/index.js"
         }
     }
     </script>
@@ -160,6 +160,7 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;

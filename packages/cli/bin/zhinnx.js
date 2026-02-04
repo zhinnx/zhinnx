@@ -18,8 +18,8 @@ function generatePackageJson(projectName) {
     "start": "node server.js"
   },
   "dependencies": {
-    "zhinnx-core": "^2.0.0",
-    "zhinnx-server": "^2.0.0"
+    "@zhinnx/core": "^2.0.0",
+    "@zhinnx/server": "^2.0.0"
   }
 }
 `;
@@ -27,7 +27,7 @@ function generatePackageJson(projectName) {
 
 function generateServerJs() {
     return `import http from 'http';
-import { handleRequest } from 'zhinnx-server';
+import { handleRequest } from '@zhinnx/server';
 
 const PORT = process.env.PORT || 3000;
 
@@ -40,7 +40,7 @@ server.listen(PORT, () => {
 }
 
 function generateClientAppJs() {
-    return `import { Router } from 'zhinnx-core';
+    return `import { Router } from '@zhinnx/core';
 
 // We rely on window.__ROUTES__ injected by the server.
 const serverRoutes = window.__ROUTES__ || {};
@@ -72,7 +72,7 @@ if (rootElement) {
 }
 
 function generateIndexPage() {
-    return `import { Component, html } from 'zhinnx-core';
+    return `import { Component, html } from '@zhinnx/core';
 
 export default class HomePage extends Component {
     static meta = {
@@ -93,7 +93,7 @@ export default class HomePage extends Component {
 }
 
 function generateApiHello() {
-    return `import { createHandler } from 'zhinnx-server';
+    return `import { createHandler } from '@zhinnx/server';
 
 export default createHandler(async (req, res) => {
     return { message: "Hello from zhinnx API!" };
