@@ -13,13 +13,13 @@ zhinnx menjembatani kesenjangan antara Vanilla JS dan Framework modern. Ia meman
 
 ## 3. Arsitektur (Architecture)
 
-### Frontend (zhinnx-core)
+### Frontend (@zhinnx/core)
 Menggunakan model **Component-Based** dengan Virtual DOM.
 *   **View**: Menggunakan Tagged Template Literals (`html\``).
 *   **State**: Menggunakan `Proxy` untuk reaktivitas otomatis (Fine-Grained).
 *   **Routing**: File-based routing yang disinkronkan antara server dan client.
 
-### Backend (zhinnx-server)
+### Backend (@zhinnx/server)
 Menggunakan pola **Streaming SSR**.
 *   **SSR**: Merender komponen ke stream HTML untuk TTFB instan.
 *   **Handler**: Wrapper serverless-ready yang kompatibel dengan Vercel.
@@ -51,7 +51,7 @@ Struktur zhinnx adalah monorepo:
 Komponen di zhinnx adalah ES6 Class yang mewarisi `Component`.
 
 ```javascript
-import { Component, html } from 'zhinnx-core';
+import { Component, html } from '@zhinnx/core';
 
 export class UserCard extends Component {
   constructor() {

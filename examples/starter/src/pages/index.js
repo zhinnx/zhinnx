@@ -1,4 +1,4 @@
-import { Component, html } from 'zhinnx-core';
+import { Component, html } from '@zhinnx/core';
 
 export default class HomePage extends Component {
     static meta = {

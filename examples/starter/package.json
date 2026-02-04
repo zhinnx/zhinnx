@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "zhinnx-core": "file:../../packages/core",
-    "zhinnx-server": "file:../../packages/server"
+    "@zhinnx/core": "file:../../packages/core",
+    "@zhinnx/server": "file:../../packages/server"
   }
 }

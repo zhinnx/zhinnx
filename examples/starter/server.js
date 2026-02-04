@@ -1,5 +1,5 @@
 import http from 'http';
-import { handleRequest } from 'zhinnx-server';
+import { handleRequest } from '@zhinnx/server';
 
 const PORT = process.env.PORT || 3000;
 

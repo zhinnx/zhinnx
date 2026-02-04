@@ -1,4 +1,4 @@
-import { Router } from '../packages/core/index.js';
+import { Router } from '@zhinnx/core';
 
 // We rely on window.__ROUTES__ injected by the server.
 const serverRoutes = window.__ROUTES__ || {};
