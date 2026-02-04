@@ -103,7 +103,15 @@ export default class DocsPage extends Component {
                             <!-- Architecture -->
                             <section id="architecture" class="mb-24 scroll-mt-28">
                                 <h2 class="text-4xl font-bold mb-6">Architecture</h2>
-                                <p class="mb-6">zhinnx is a monorepo consisting of two primary packages that work in harmony:</p>
+                                <p class="mb-6">zhinnx is designed as a modular monorepo. This structure ensures clear separation of concerns while maintaining tight integration.</p>
+
+                                <h3 class="text-2xl font-bold mb-4">Why Scoped Packages? (@zhinnx/*)</h3>
+                                <p class="mb-6">
+                                    We use the official npm scope <code>@zhinnx</code> to guarantee package name ownership and security. This prevents dependency confusion attacks and clearly signals that these are official core modules.
+                                    <br><br>
+                                    Previous versions used flat names, but modern enterprise standards demand scoped packages for better package management and clarity.
+                                </p>
+
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                     <div class="border-2 border-black p-6 bg-white comic-shadow">
                                         <h3 class="text-2xl font-bold mb-2">@zhinnx/core</h3>

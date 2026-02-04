@@ -46,7 +46,7 @@ export class Navbar extends Component {
                 </div>
 
                 <!-- Mobile Menu Dropdown -->
-                <div class="md:hidden border-t-2 border-black bg-white absolute w-full left-0 z-40 shadow-xl overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}">
+                <div class="md:hidden border-t-2 border-black bg-white absolute w-full left-0 z-40 shadow-xl overflow-hidden transition-all duration-300 ease-linear ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}" style="transition-timing-function: steps(5);">
                     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <a href="/" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Home</a>
                         <a href="/#features" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Features</a>
