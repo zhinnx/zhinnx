@@ -13,7 +13,7 @@ export default class LandingPage extends Component {
             <div class="min-h-screen bg-white text-black overflow-x-hidden font-sans">
                 <!-- Navbar Mount Point -->
                 <div id="navbar-mount">
-                    ${new Navbar().render()}
+                    ${new Navbar({ static: true }).render()}
                 </div>
 
                 <!-- Hero -->
@@ -42,7 +42,7 @@ export default class LandingPage extends Component {
                                 <div class="relative w-full max-w-md aspect-square bg-gray-100 border-2 border-black comic-shadow p-8 flex items-center justify-center">
                                     <img src="/zhinnx_nobg.png" alt="ZhinNX Box" class="w-full h-full object-contain grayscale">
                                     <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 comic-shadow">
-                                        <span class="font-mono font-bold text-lg">v2.1.0 Ready</span>
+                                        <span class="font-mono font-bold text-lg">v2.1.5 Ready</span>
                                     </div>
                                 </div>
                             </div>

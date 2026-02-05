@@ -131,7 +131,10 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     {
         "imports": {
             "@zhinnx/core": "/node_modules/@zhinnx/core/index.js",
-            "@zhinnx/server": "/node_modules/@zhinnx/server/index.js"
+            "@zhinnx/server": "/node_modules/@zhinnx/server/index.js",
+            "@zhinnx/font": "/node_modules/@zhinnx/font/index.js",
+            "@zhinnx/ui": "/node_modules/@zhinnx/ui/index.js",
+            "@zhinnx/ytdl": "/node_modules/@zhinnx/ytdl/index.js"
         }
     }
     </script>

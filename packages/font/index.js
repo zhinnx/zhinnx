@@ -1,14 +1,14 @@
+import { definePlugin } from '@zhinnx/core';
+import FontBuilderPage from './src/FontBuilderPage.js';
+
 export * from './src/glyph.js';
 export * from './src/renderer.js';
 
-export function defineFont(config) {
-    return {
+export function defineFont(config = {}) {
+    return definePlugin({
         name: 'font',
         setup(app) {
             const { name, src, source, build, weight, display = 'swap', style = 'normal' } = config;
-
-            // If build mode is enabled, we assume files are generated/served or handled by CLI separately.
-            // For runtime injection:
 
             if (src) {
                 const sources = Array.isArray(src) ? src : [src];
@@ -41,8 +41,24 @@ export function defineFont(config) {
                     app.injectHead(`<style>${css}</style>`);
                 }
             }
+        },
+        server(ctx) {
+            ctx.router.add('/font', FontBuilderPage);
+        },
+        client(ctx) {
+             ctx.routes['/font'] = {
+                regex: '^/font$',
+                loader: () => Promise.resolve(FontBuilderPage)
+            };
+        },
+        async cli(program) {
+            const { buildFont, previewFont, exportFont } = await import('./src/cli.js');
+
+            program.command('font build', 'Build font from glyphs', buildFont);
+            program.command('font preview', 'Preview font', previewFont);
+            program.command('font export', 'Export font files', exportFont);
         }
-    };
+    });
 }
 
 export default defineFont;

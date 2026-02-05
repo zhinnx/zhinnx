@@ -1,0 +1,10 @@
+:root {
+  --zn-primary: #000000;
+  --zn-secondary: #ffffff;
+  --zn-accent: #ffeb3b;
+  --zn-border: 2px solid #000000;
+  --zn-shadow: 4px 4px 0px 0px #000000;
+  --zn-shadow-hover: 6px 6px 0px 0px #000000;
+  --zn-radius: 0px;
+  --zn-font: 'Space Grotesk', sans-serif;
+}

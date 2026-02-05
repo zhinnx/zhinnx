@@ -1,10 +1,13 @@
 {
   "name": "zhinnx-site",
-  "version": "2.1.0",
+  "version": "2.1.5",
   "type": "module",
   "private": true,
   "dependencies": {
     "@zhinnx/core": "file:../../packages/core",
-    "@zhinnx/server": "file:../../packages/server"
+    "@zhinnx/server": "file:../../packages/server",
+    "@zhinnx/font": "file:../../packages/font",
+    "@zhinnx/ui": "file:../../packages/ui",
+    "@zhinnx/ytdl": "file:../../packages/ytdl"
   }
 }

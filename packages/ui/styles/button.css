@@ -1,0 +1,36 @@
+.zn-btn {
+  font-family: var(--zn-font);
+  border: var(--zn-border);
+  background: var(--zn-secondary);
+  color: var(--zn-primary);
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--zn-shadow);
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.zn-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--zn-shadow-hover);
+}
+
+.zn-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.zn-btn.zn-primary {
+  background: var(--zn-primary);
+  color: var(--zn-secondary);
+}
+
+.zn-btn.zn-accent {
+  background: var(--zn-accent);
+  color: var(--zn-primary);
+}
