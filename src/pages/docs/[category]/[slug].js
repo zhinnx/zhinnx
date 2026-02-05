@@ -13,12 +13,8 @@ export default class DocsPage extends Component {
 
     static async getProps({ params }) {
         const { category, slug } = params;
-        const docsDir = path.resolve('docs'); // Root relative? or site/docs?
-        // We are in site/src/pages/docs/[category]/[slug].js
-        // The process runs in site/
-        // So docs are in site/docs
 
-        const filePath = path.join(process.cwd(), 'docs', category, `${slug}.md`);
+        const filePath = path.join(process.cwd(), 'src', 'docs', category, `${slug}.md`);
 
         if (!fs.existsSync(filePath)) {
             return { error: 'Document not found' };
@@ -30,10 +26,10 @@ export default class DocsPage extends Component {
 
         // Build Sidebar Navigation
         const sidebar = [];
-        const categories = fs.readdirSync(path.join(process.cwd(), 'docs'));
+        const categories = fs.readdirSync(path.join(process.cwd(), 'src', 'docs'));
 
         for (const cat of categories) {
-            const catPath = path.join(process.cwd(), 'docs', cat);
+            const catPath = path.join(process.cwd(), 'src', 'docs', cat);
             if (fs.statSync(catPath).isDirectory()) {
                 const files = fs.readdirSync(catPath)
                     .filter(f => f.endsWith('.md'))
