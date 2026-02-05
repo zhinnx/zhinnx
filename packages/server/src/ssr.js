@@ -174,6 +174,11 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
             font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
+            text-rendering: optimizeSpeed; /* Performance: Prioritize speed over legibility */
+        }
+        /* Performance: GPU Acceleration for smoother animations */
+        .comic-shadow, .comic-shadow-sm, .comic-shadow-hover {
+            will-change: transform, box-shadow;
         }
         .comic-border { border: 2px solid #000000; }
         .comic-border-t { border-top: 2px solid #000000; }

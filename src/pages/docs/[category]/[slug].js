@@ -66,6 +66,8 @@ export default class DocsPage extends Component {
             `;
         }
 
+        // Optimization: Lazy load heavy content sections if needed
+        // For now, we utilize 'content-visibility: auto' on large prose block to improve render performance
         return html`
             <div class="min-h-screen bg-white font-sans">
                 <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
@@ -74,7 +76,7 @@ export default class DocsPage extends Component {
                     <div class="flex flex-col md:flex-row py-10 gap-10">
                         <!-- Sidebar -->
                         <aside class="w-full md:w-64 flex-shrink-0">
-                            <nav class="sticky top-24">
+                            <nav class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2">
                                 ${sidebar.map(section => html`
                                     <div class="mb-6">
                                         <h3 class="font-bold uppercase text-sm text-gray-500 mb-3 tracking-wider">${section.name.replace('-', ' ')}</h3>
@@ -93,7 +95,7 @@ export default class DocsPage extends Component {
                         </aside>
 
                         <!-- Content -->
-                        <main class="flex-1 min-w-0">
+                        <main class="flex-1 min-w-0" style="content-visibility: auto; contain-intrinsic-size: 1px 1000px;">
                             <article class="prose prose-lg max-w-none prose-headings:font-bold prose-h1:text-5xl prose-h1:tracking-tight prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-code:bg-gray-100 prose-code:text-black prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-pre:bg-gray-900 prose-pre:text-gray-50 prose-img:rounded-lg prose-img:border-2 prose-img:border-black prose-img:shadow-[4px_4px_0_0_#000]">
                                 ${content}
                             </article>

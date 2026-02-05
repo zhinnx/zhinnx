@@ -180,26 +180,39 @@ export default class LandingPage extends Component {
     afterRender() {
         const navMount = this.$('#navbar-mount');
         if (navMount) {
-            new Navbar().mount(navMount);
+            // Defer Navbar hydration slightly to prioritize Main Content interaction
+            setTimeout(() => {
+                 new Navbar().mount(navMount);
+            }, 0);
         }
 
+        // Defer heavy animations to avoid blocking TTI
         if (window.gsap) {
-            window.gsap.from(".hero-text > *", {
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: "power3.out",
-                delay: 0.2
-            });
+            // Use requestAnimationFrame or requestIdleCallback if available
+            const startAnimations = () => {
+                window.gsap.from(".hero-text > *", {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: "power3.out",
+                    delay: 0.2
+                });
 
-            window.gsap.from(".hero-image", {
-                scale: 0.8,
-                opacity: 0,
-                duration: 1,
-                ease: "elastic.out(1, 0.75)",
-                delay: 0.5
-            });
+                window.gsap.from(".hero-image", {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "elastic.out(1, 0.75)",
+                    delay: 0.5
+                });
+            };
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => startAnimations());
+            } else {
+                setTimeout(startAnimations, 100);
+            }
         }
     }
 }

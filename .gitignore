@@ -6,3 +6,4 @@ packages/*/node_modules
 site/node_modules
 examples/*/node_modules
 node_modules/
+node_modules/
