@@ -1,7 +1,7 @@
 {
-  "name": "@zhinnx/core",
+  "name": "@zhinnx/font",
   "version": "2.1.0",
-  "description": "Core library for zhinnx framework",
+  "description": "Font plugin for zhinnx",
   "type": "module",
   "main": "./index.js",
   "exports": {
@@ -10,6 +10,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["zhinnx", "framework", "vdom", "reactive"],
+  "keywords": ["zhinnx", "font", "plugin"],
   "license": "MIT"
 }

@@ -1,0 +1,7 @@
+Test running on 3001
+Failed to load src/app.js ReferenceError: window is not defined
+    at file:///app/src/app.js:4:22
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async Server.handleRequest (file:///app/packages/server/src/handler.js:144:26)

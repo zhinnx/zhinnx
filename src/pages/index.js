@@ -2,7 +2,7 @@ import { Component, html } from '../../packages/core/index.js';
 
 export default class LandingPage extends Component {
     static meta = {
-        title: 'zhinnx - The Modern Tech Stack',
+        title: 'ZhinNX - The Modern Tech Stack',
         description: 'Professional, lightweight, and production-ready web framework.',
         image: '/zhinnx_nobg.png'
     }

@@ -136,6 +136,20 @@ export async function handleRequest(req, res) {
     }
 
     // SSR Logic
+    // Try to load app.js for plugins
+    const APP_PATH = path.join(ROOT_DIR, 'src', 'app.js');
+    let app = null;
+    if (fs.existsSync(APP_PATH)) {
+        try {
+             const mod = await import(path.join(ROOT_DIR, 'src', 'app.js'));
+             if (mod.default && typeof mod.default.mount === 'function') {
+                 app = mod.default;
+             }
+        } catch (e) {
+             console.error("Failed to load src/app.js", e);
+        }
+    }
+
     // Find matching route
     let matchedRoute = null;
     let params = {};
@@ -164,7 +178,7 @@ export async function handleRequest(req, res) {
                 PageComponent,
                 { params },
                 pathname,
-                { routes: ROUTE_MAP }
+                { routes: ROUTE_MAP, app }
             );
 
             stream.pipe(res);

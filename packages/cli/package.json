@@ -1,6 +1,6 @@
 {
-  "name": "zhinnx",
-  "version": "2.0.0",
+  "name": "@zhinnx/cli",
+  "version": "2.1.0",
   "description": "CLI tool for zhinnx",
   "type": "module",
   "bin": {
