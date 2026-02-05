@@ -1,5 +1,10 @@
 {
-  "framework": null,
-  "outputDirectory": "site/dist",
-  "cleanUrls": true
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/site/api/index.js" }
+  ],
+  "functions": {
+    "site/api/index.js": {
+      "includeFiles": "site/**"
+    }
+  }
 }
