@@ -1,5 +1,7 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.js" }
-  ]
+  "framework": null,
+  "buildCommand": "cd site && npm install && npm run build",
+  "outputDirectory": "site/dist",
+  "rootDirectory": ".",
+  "cleanUrls": true
 }
