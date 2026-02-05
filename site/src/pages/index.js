@@ -40,7 +40,7 @@ export default class LandingPage extends Component {
                             </div>
                             <div class="hero-image hidden lg:flex justify-center items-center">
                                 <div class="relative w-full max-w-md aspect-square bg-gray-100 border-2 border-black comic-shadow p-8 flex items-center justify-center">
-                                    <img src="/zhinnx_nobg.png" alt="Zhinnx Box" class="w-full h-full object-contain grayscale">
+                                    <img src="/zhinnx_nobg.png" alt="ZhinNX Box" class="w-full h-full object-contain grayscale">
                                     <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 comic-shadow">
                                         <span class="font-mono font-bold text-lg">v2.1.0 Ready</span>
                                     </div>
@@ -155,14 +155,14 @@ export default class LandingPage extends Component {
                 <!-- Footer -->
                 <footer class="bg-black text-white py-16 border-t-2 border-black">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <img src="/zhinnx_nobg.png" alt="zhinnx" class="h-16 w-16 mx-auto mb-8 grayscale invert">
-                        <h2 class="text-3xl font-bold mb-8">zhinnx</h2>
+                        <img src="/zhinnx_nobg.png" alt="ZhinNX" class="h-16 w-16 mx-auto mb-8 grayscale invert">
+                        <h2 class="text-3xl font-bold mb-8">ZhinNX</h2>
                         <div class="flex justify-center gap-8 mb-8 font-mono text-sm">
                             <a href="/docs" class="hover:text-gray-400 hover:underline">Documentation</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="hover:text-gray-400 hover:underline">GitHub</a>
                             <a href="#" class="hover:text-gray-400 hover:underline">Twitter</a>
                         </div>
-                        <p class="text-gray-500 font-mono text-sm">© 2026 zhinnx. MIT License.</p>
+                        <p class="text-gray-500 font-mono text-sm">© 2026 ZhinNX. MIT License.</p>
                     </div>
                 </footer>
             </div>

@@ -29,6 +29,30 @@ export default class DocsIndex extends Component {
                             </ul>
                         </div>
                     </div>
+
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <a href="/docs/plugins" class="block p-6 border-2 border-black hover:bg-black hover:text-white transition-colors">
+                            <h3 class="text-xl font-bold mb-2">Plugins System</h3>
+                            <p>Extend ZhinNX functionality.</p>
+                        </a>
+                        <a href="/docs/font-builder" class="block p-6 border-2 border-black hover:bg-black hover:text-white transition-colors">
+                            <h3 class="text-xl font-bold mb-2">Font Engine</h3>
+                            <p>Advanced font generation and injection.</p>
+                        </a>
+                        <a href="/docs/styling" class="block p-6 border-2 border-black hover:bg-black hover:text-white transition-colors">
+                            <h3 class="text-xl font-bold mb-2">Styling</h3>
+                            <p>The standard CSS approach.</p>
+                        </a>
+                        <a href="/docs/cli" class="block p-6 border-2 border-black hover:bg-black hover:text-white transition-colors">
+                            <h3 class="text-xl font-bold mb-2">CLI</h3>
+                            <p>Command line reference.</p>
+                        </a>
+                        <a href="/docs/architecture" class="block p-6 border-2 border-black hover:bg-black hover:text-white transition-colors">
+                            <h3 class="text-xl font-bold mb-2">Architecture</h3>
+                            <p>Deep dive into internals.</p>
+                        </a>
+                    </div>
+
                     <div class="mt-12">
                          <h2 class="text-4xl font-bold mb-8">Roadmap</h2>
                          <p class="text-xl">Version 2.1.0 introduces the Plugin System and Scoped CLI.</p>
