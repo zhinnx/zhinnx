@@ -1,0 +1,18 @@
+{
+  "name": "@zhinnx/font",
+  "version": "2.1.0",
+  "description": "Font engine and plugin for ZhinNX",
+  "type": "module",
+  "main": "./index.js",
+  "bin": {
+    "zhinnx-font": "./bin/zhinnx-font.js"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": ["zhinnx", "font", "plugin", "engine"],
+  "license": "MIT"
+}

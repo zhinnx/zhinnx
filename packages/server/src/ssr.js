@@ -102,6 +102,8 @@ export function renderToString(vnode) {
  * @returns {Readable} - Node.js Readable Stream
  */
 export function renderPageStream(PageComponent, props = {}, url = '/', injections = {}) {
+    const app = injections.app;
+
     // Instantiate Page to get metadata
     const page = new PageComponent(props);
     const meta = PageComponent.meta || {};
@@ -136,6 +138,7 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
 
     <title>${escapeHtml(title)}</title>
     ${scripts}
+    ${app && app.headTags ? app.headTags.join('\n') : ''}
     <meta name="description" content="${escapeHtml(description)}">
 
     <!-- OpenGraph -->
@@ -204,7 +207,12 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
 
         // Chunk 3: Footer & Scripts
         yield `</div>
-    <script type="module" src="/src/app.js"></script>
+    <script type="module">
+        import * as mod from '/src/app.js';
+        if (mod.default && typeof mod.default.mount === 'function') {
+            mod.default.mount('#app');
+        }
+    </script>
 </body>
 </html>`;
     })();

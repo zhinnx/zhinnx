@@ -3,7 +3,7 @@ import { Navbar } from '../components/Navbar.js';
 
 export default class LandingPage extends Component {
     static meta = {
-        title: 'zhinnx - The Modern Tech Stack',
+        title: 'ZhinNX - The Modern Tech Stack',
         description: 'Professional, lightweight, and production-ready web framework.',
         image: '/zhinnx_nobg.png'
     }
@@ -40,9 +40,9 @@ export default class LandingPage extends Component {
                             </div>
                             <div class="hero-image hidden lg:flex justify-center items-center">
                                 <div class="relative w-full max-w-md aspect-square bg-gray-100 border-2 border-black comic-shadow p-8 flex items-center justify-center">
-                                    <img src="/zhinnx_nobg.png" alt="Zhinnx Box" class="w-full h-full object-contain grayscale">
+                                    <img src="/zhinnx_nobg.png" alt="ZhinNX Box" class="w-full h-full object-contain grayscale">
                                     <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 comic-shadow">
-                                        <span class="font-mono font-bold text-lg">v2.0.0 Ready</span>
+                                        <span class="font-mono font-bold text-lg">v2.1.0 Ready</span>
                                     </div>
                                 </div>
                             </div>
@@ -64,10 +64,10 @@ export default class LandingPage extends Component {
                                 <div>
                                     <h3 class="text-3xl font-bold mb-4">Native NPM Integration</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        zhinnx is not a walled garden. It is built as a set of modular packages (@zhinnx/core, @zhinnx/server) that you can install individually or together. This means you can drop zhinnx components into an existing project or build a new one from scratch using standard tools.
+                                        ZhinNX is not a walled garden. It is built as a set of modular packages (@zhinnx/core, @zhinnx/server) that you can install individually or together. This means you can drop ZhinNX components into an existing project or build a new one from scratch using standard tools.
                                     </p>
                                     <p class="text-lg text-gray-700 leading-relaxed">
-                                        Unlike other frameworks that require specific CLI tools or global installations to function, zhinnx lives entirely in your <code>package.json</code>. This guarantees long-term stability and compatibility with the vast JavaScript ecosystem.
+                                        Unlike other frameworks that require specific CLI tools or global installations to function, ZhinNX lives entirely in your <code>package.json</code>. This guarantees long-term stability and compatibility with the vast JavaScript ecosystem.
                                     </p>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@ export default class LandingPage extends Component {
                                 <div>
                                     <h3 class="text-3xl font-bold mb-4">Streaming Server-Side Rendering</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        Performance is not an afterthought. zhinnx implements a cutting-edge HTML streaming pipeline. Instead of waiting for the entire page to render on the server before sending it to the client, zhinnx streams the HTML head and content chunks as they are generated.
+                                        Performance is not an afterthought. ZhinNX implements a cutting-edge HTML streaming pipeline. Instead of waiting for the entire page to render on the server before sending it to the client, ZhinNX streams the HTML head and content chunks as they are generated.
                                     </p>
                                     <p class="text-lg text-gray-700 leading-relaxed">
                                         This results in an incredible Time-To-First-Byte (TTFB). Your users see content instantly, while the rest of the page loads in the background. Search engines love this, giving you a massive SEO advantage out of the box without any complex configuration.
@@ -96,7 +96,7 @@ export default class LandingPage extends Component {
                                 <div>
                                     <h3 class="text-3xl font-bold mb-4">Zero-Build Development</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        Wait time is wasted time. zhinnx eliminates the build step during development. By leveraging native ES Modules (ESM) supported by all modern browsers and Node.js, your code runs directly.
+                                        Wait time is wasted time. ZhinNX eliminates the build step during development. By leveraging native ES Modules (ESM) supported by all modern browsers and Node.js, your code runs directly.
                                     </p>
                                     <p class="text-lg text-gray-700 leading-relaxed">
                                         Change a file, refresh the browser, and see the result instantly. No Webpack bundling, no Babel transpilation, no waiting for a dev server to "warm up". It is raw speed that keeps you in the flow.
@@ -114,7 +114,7 @@ export default class LandingPage extends Component {
                         <p class="text-xl text-gray-700 leading-loose">
                             We believe that web development has become unnecessarily complex. Layers of abstraction have buried the simple beauty of HTML, CSS, and JavaScript.
                             <br><br>
-                            <strong>zhinnx is a return to sanity.</strong>
+                            <strong>ZhinNX is a return to sanity.</strong>
                             <br><br>
                             It provides just enough structure to build large-scale applications—Components, Routing, State Management—without forcing you into a black box. You own your code. You understand every line. That is true power.
                         </p>
@@ -135,7 +135,7 @@ export default class LandingPage extends Component {
                                             <div class="w-3 h-3 rounded-full bg-gray-500"></div>
                                         </div>
                                     </div>
-                                    <code class="font-mono text-white text-lg block mb-4">> npx zhinnx create my-app</code>
+                                    <code class="font-mono text-white text-lg block mb-4">> npx @zhinnx/cli create my-app</code>
                                     <code class="font-mono text-gray-400 text-lg block mb-4">> cd my-app</code>
                                     <code class="font-mono text-gray-400 text-lg block">> node server.js</code>
                                 </div>
@@ -155,14 +155,14 @@ export default class LandingPage extends Component {
                 <!-- Footer -->
                 <footer class="bg-black text-white py-16 border-t-2 border-black">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <img src="/zhinnx_nobg.png" alt="zhinnx" class="h-16 w-16 mx-auto mb-8 grayscale invert">
-                        <h2 class="text-3xl font-bold mb-8">zhinnx</h2>
+                        <img src="/zhinnx_nobg.png" alt="ZhinNX" class="h-16 w-16 mx-auto mb-8 grayscale invert">
+                        <h2 class="text-3xl font-bold mb-8">ZhinNX</h2>
                         <div class="flex justify-center gap-8 mb-8 font-mono text-sm">
                             <a href="/docs" class="hover:text-gray-400 hover:underline">Documentation</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="hover:text-gray-400 hover:underline">GitHub</a>
                             <a href="#" class="hover:text-gray-400 hover:underline">Twitter</a>
                         </div>
-                        <p class="text-gray-500 font-mono text-sm">© 2026 zhinnx. MIT License.</p>
+                        <p class="text-gray-500 font-mono text-sm">© 2026 ZhinNX. MIT License.</p>
                     </div>
                 </footer>
             </div>

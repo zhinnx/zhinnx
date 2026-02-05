@@ -1,0 +1,9 @@
+{
+  "name": "test-v2-1",
+  "type": "module",
+  "dependencies": {
+    "@zhinnx/core": "file:../../packages/core",
+    "@zhinnx/server": "file:../../packages/server",
+    "@zhinnx/font": "file:../../packages/font"
+  }
+}
