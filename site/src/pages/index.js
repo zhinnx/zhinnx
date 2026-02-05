@@ -3,8 +3,8 @@ import { Navbar } from '../components/Navbar.js';
 
 export default class LandingPage extends Component {
     static meta = {
-        title: 'ZhinNX - The Modern Tech Stack',
-        description: 'Professional, lightweight, and production-ready web framework.',
+        title: 'ZhinNX - The Zero-Build, SSR-First Framework',
+        description: 'Professional, lightweight, and production-ready web framework for serious developers.',
         image: '/zhinnx_nobg.png'
     }
 
@@ -27,7 +27,8 @@ export default class LandingPage extends Component {
                                     BUILDERS.
                                 </h1>
                                 <p class="text-xl md:text-2xl font-medium text-gray-600 mb-10 max-w-lg border-l-4 border-black pl-6">
-                                    No magic. No bloat. Just pure, unadulterated performance. Ready for npm. Ready for production.
+                                    No magic. No bloat. Just pure, unadulterated performance.
+                                    <strong>Zero-Build. Native ESM. SSR-First.</strong>
                                 </p>
                                 <div class="flex flex-col sm:flex-row gap-4">
                                     <a href="/docs" class="text-center bg-black text-white text-xl font-bold px-8 py-4 border-2 border-black comic-shadow hover:bg-gray-900 transition-all active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -42,7 +43,7 @@ export default class LandingPage extends Component {
                                 <div class="relative w-full max-w-md aspect-square bg-gray-100 border-2 border-black comic-shadow p-8 flex items-center justify-center">
                                     <img src="/zhinnx_nobg.png" alt="ZhinNX Box" class="w-full h-full object-contain grayscale">
                                     <div class="absolute -bottom-6 -right-6 bg-white border-2 border-black p-4 comic-shadow">
-                                        <span class="font-mono font-bold text-lg">v2.1.5 Ready</span>
+                                        <span class="font-mono font-bold text-lg">v2.1.5 Stable</span>
                                     </div>
                                 </div>
                             </div>
@@ -50,79 +51,85 @@ export default class LandingPage extends Component {
                     </div>
                 </header>
 
-                <!-- Detailed Features Section -->
+                <!-- Core Architecture -->
                 <section id="features" class="py-24 bg-white border-b-2 border-black">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-5xl font-black mb-16 text-center tracking-tight">WHY ZHINNX?</h2>
+                        <h2 class="text-5xl font-black mb-16 text-center tracking-tight uppercase">Core Architecture</h2>
 
-                        <div class="space-y-16">
-                            <!-- Feature 1: NPM Ecosystem -->
-                            <div class="flex flex-col md:flex-row gap-12 items-start">
-                                <div class="flex-shrink-0 w-24 h-24 bg-black text-white flex items-center justify-center text-4xl font-bold border-2 border-black comic-shadow">
-                                    npm
-                                </div>
-                                <div>
-                                    <h3 class="text-3xl font-bold mb-4">Native NPM Integration</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        ZhinNX is not a walled garden. It is built as a set of modular packages (@zhinnx/core, @zhinnx/server) that you can install individually or together. This means you can drop ZhinNX components into an existing project or build a new one from scratch using standard tools.
-                                    </p>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
-                                        Unlike other frameworks that require specific CLI tools or global installations to function, ZhinNX lives entirely in your <code>package.json</code>. This guarantees long-term stability and compatibility with the vast JavaScript ecosystem.
-                                    </p>
-                                </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <!-- Feature 1 -->
+                            <div class="p-8 border-2 border-black comic-shadow bg-white hover:translate-y-[-4px] transition-transform">
+                                <div class="text-4xl mb-4">⚡</div>
+                                <h3 class="text-2xl font-bold mb-4">Zero-Build</h3>
+                                <p class="text-gray-600">
+                                    Stop waiting for bundlers. ZhinNX uses native ES Modules to serve your code instantly. Change a file, refresh, done.
+                                </p>
                             </div>
 
-                            <!-- Feature 2: Streaming SSR -->
-                            <div class="flex flex-col md:flex-row gap-12 items-start">
-                                <div class="flex-shrink-0 w-24 h-24 bg-white text-black flex items-center justify-center text-4xl font-bold border-2 border-black comic-shadow">
-                                    SSR
-                                </div>
-                                <div>
-                                    <h3 class="text-3xl font-bold mb-4">Streaming Server-Side Rendering</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        Performance is not an afterthought. ZhinNX implements a cutting-edge HTML streaming pipeline. Instead of waiting for the entire page to render on the server before sending it to the client, ZhinNX streams the HTML head and content chunks as they are generated.
-                                    </p>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
-                                        This results in an incredible Time-To-First-Byte (TTFB). Your users see content instantly, while the rest of the page loads in the background. Search engines love this, giving you a massive SEO advantage out of the box without any complex configuration.
-                                    </p>
-                                </div>
+                             <!-- Feature 2 -->
+                            <div class="p-8 border-2 border-black comic-shadow bg-white hover:translate-y-[-4px] transition-transform">
+                                <div class="text-4xl mb-4">🌊</div>
+                                <h3 class="text-2xl font-bold mb-4">Streaming SSR</h3>
+                                <p class="text-gray-600">
+                                    Don't make users wait. HTML is streamed from the server immediately, ensuring world-class TTFB and SEO.
+                                </p>
                             </div>
 
-                            <!-- Feature 3: Developer Experience -->
-                            <div class="flex flex-col md:flex-row gap-12 items-start">
-                                <div class="flex-shrink-0 w-24 h-24 bg-gray-200 text-black flex items-center justify-center text-4xl font-bold border-2 border-black comic-shadow">
-                                    DX
-                                </div>
-                                <div>
-                                    <h3 class="text-3xl font-bold mb-4">Zero-Build Development</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                                        Wait time is wasted time. ZhinNX eliminates the build step during development. By leveraging native ES Modules (ESM) supported by all modern browsers and Node.js, your code runs directly.
-                                    </p>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
-                                        Change a file, refresh the browser, and see the result instantly. No Webpack bundling, no Babel transpilation, no waiting for a dev server to "warm up". It is raw speed that keeps you in the flow.
-                                    </p>
-                                </div>
+                             <!-- Feature 3 -->
+                            <div class="p-8 border-2 border-black comic-shadow bg-white hover:translate-y-[-4px] transition-transform">
+                                <div class="text-4xl mb-4">🧩</div>
+                                <h3 class="text-2xl font-bold mb-4">Plugin First</h3>
+                                <p class="text-gray-600">
+                                    Extensible by design. Add Font Engines, UI libraries, or custom logic via a standardized plugin API.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Philosophy Section -->
-                <section id="philosophy" class="py-24 bg-gray-50 border-b-2 border-black">
-                     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <h2 class="text-4xl font-black mb-8">OUR PHILOSOPHY</h2>
-                        <p class="text-xl text-gray-700 leading-loose">
-                            We believe that web development has become unnecessarily complex. Layers of abstraction have buried the simple beauty of HTML, CSS, and JavaScript.
-                            <br><br>
-                            <strong>ZhinNX is a return to sanity.</strong>
-                            <br><br>
-                            It provides just enough structure to build large-scale applications—Components, Routing, State Management—without forcing you into a black box. You own your code. You understand every line. That is true power.
-                        </p>
-                     </div>
+                <!-- Ecosystem / Plugins -->
+                <section class="py-24 bg-gray-50 border-b-2 border-black">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                         <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                            <h2 class="text-4xl font-black uppercase tracking-tight">Plugin Ecosystem</h2>
+                            <a href="/plugins" class="text-xl font-bold border-b-2 border-black hover:bg-black hover:text-white transition-colors">View Marketplace -></a>
+                         </div>
+
+                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="bg-white border-2 border-black p-6 comic-shadow-sm">
+                                <h3 class="font-bold text-xl mb-2">@zhinnx/font</h3>
+                                <p class="text-sm text-gray-500 mb-4">Official Font Engine</p>
+                                <p class="mb-4">Create, build, and optimize fonts directly within your application. Includes visual editor.</p>
+                                <div class="flex gap-2">
+                                    <a href="/font" class="px-3 py-1 bg-black text-white text-sm font-bold">Try Demo</a>
+                                    <a href="/docs/plugins/font" class="px-3 py-1 border border-black text-sm font-bold">Docs</a>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border-2 border-black p-6 comic-shadow-sm">
+                                <h3 class="font-bold text-xl mb-2">@zhinnx/ui</h3>
+                                <p class="text-sm text-gray-500 mb-4">Official UI Preset</p>
+                                <p class="mb-4">A lightweight, CSS-only UI kit following the Comic Modern design system.</p>
+                                <div class="flex gap-2">
+                                    <a href="/docs/plugins/ui" class="px-3 py-1 border border-black text-sm font-bold">Docs</a>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border-2 border-black p-6 comic-shadow-sm">
+                                <h3 class="font-bold text-xl mb-2">@zhinnx/ytdl</h3>
+                                <p class="text-sm text-gray-500 mb-4">Example Tool</p>
+                                <p class="mb-4">Real-world usage example: YouTube downloader with API integration.</p>
+                                <div class="flex gap-2">
+                                    <a href="/ytdl" class="px-3 py-1 bg-black text-white text-sm font-bold">Try Demo</a>
+                                    <a href="/docs/plugins/ytdl" class="px-3 py-1 border border-black text-sm font-bold">Docs</a>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
                 </section>
 
-                <!-- Installation -->
-                <section id="install" class="py-24 bg-white">
+                <!-- CLI Workflow -->
+                <section class="py-24 bg-white">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                             <div>
@@ -137,16 +144,17 @@ export default class LandingPage extends Component {
                                     </div>
                                     <code class="font-mono text-white text-lg block mb-4">> npx @zhinnx/cli create my-app</code>
                                     <code class="font-mono text-gray-400 text-lg block mb-4">> cd my-app</code>
-                                    <code class="font-mono text-gray-400 text-lg block">> node server.js</code>
+                                    <code class="font-mono text-gray-400 text-lg block">> npm run dev</code>
                                 </div>
-                                <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
                             </div>
                             <div class="border-2 border-black bg-white p-8 comic-shadow h-full flex flex-col justify-center">
-                                <h3 class="text-2xl font-bold mb-4">Or add to existing project:</h3>
-                                <div class="bg-gray-100 p-4 border-2 border-black mb-4">
-                                    <code class="font-mono text-black">npm install @zhinnx/core @zhinnx/server</code>
-                                </div>
-                                <p class="text-sm text-gray-500 font-mono">Requires Node.js 16+</p>
+                                <h3 class="text-2xl font-bold mb-4">Explicit API</h3>
+                                <p class="text-lg text-gray-700 mb-4">
+                                    ZhinNX doesn't hide logic. Your <code>server.js</code> is yours. Your <code>app.js</code> is yours.
+                                </p>
+                                <p class="text-lg text-gray-700">
+                                    We provide the tools (Core, Server, Plugins), you build the castle.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -159,8 +167,8 @@ export default class LandingPage extends Component {
                         <h2 class="text-3xl font-bold mb-8">ZhinNX</h2>
                         <div class="flex justify-center gap-8 mb-8 font-mono text-sm">
                             <a href="/docs" class="hover:text-gray-400 hover:underline">Documentation</a>
+                            <a href="/plugins" class="hover:text-gray-400 hover:underline">Marketplace</a>
                             <a href="https://github.com/zhinnx/zhinnx" class="hover:text-gray-400 hover:underline">GitHub</a>
-                            <a href="#" class="hover:text-gray-400 hover:underline">Twitter</a>
                         </div>
                         <p class="text-gray-500 font-mono text-sm">© 2026 ZhinNX. MIT License.</p>
                     </div>
@@ -170,7 +178,6 @@ export default class LandingPage extends Component {
     }
 
     afterRender() {
-        // Mount Navbar component for interactivity
         const navMount = this.$('#navbar-mount');
         if (navMount) {
             new Navbar().mount(navMount);

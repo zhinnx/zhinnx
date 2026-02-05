@@ -5,9 +5,11 @@
   "private": true,
   "dependencies": {
     "@zhinnx/core": "file:../../packages/core",
-    "@zhinnx/server": "file:../../packages/server",
     "@zhinnx/font": "file:../../packages/font",
+    "@zhinnx/server": "file:../../packages/server",
     "@zhinnx/ui": "file:../../packages/ui",
-    "@zhinnx/ytdl": "file:../../packages/ytdl"
+    "@zhinnx/ytdl": "file:../../packages/ytdl",
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.1"
   }
 }

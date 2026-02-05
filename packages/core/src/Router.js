@@ -61,7 +61,17 @@ export class Router {
           }
 
           // Instantiate and mount the page component with Params
-          const page = new ComponentClass({ params });
+          let props = { params };
+
+          // Hydrate Initial Props (Server Data Injection)
+          if (shouldHydrate && window.__INITIAL_PROPS__) {
+              props = { ...props, ...window.__INITIAL_PROPS__ };
+              // Consume them so they don't persist to other routes unexpectedly
+              // (Though current logic reloads for Docs, so it's fine)
+              window.__INITIAL_PROPS__ = null;
+          }
+
+          const page = new ComponentClass(props);
           page.mount(this.root);
 
           this.hydrated = true;

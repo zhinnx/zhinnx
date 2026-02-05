@@ -223,14 +223,25 @@ export async function handleRequest(req, res) {
                 throw new Error("Route component not found or default export missing");
             }
 
+            // Data Fetching: Check for getProps
+            let initialProps = { params };
+            if (PageComponent.getProps) {
+                try {
+                    const data = await PageComponent.getProps({ params, req, res });
+                    if (data) {
+                        initialProps = { ...initialProps, ...data };
+                    }
+                } catch (e) {
+                    console.error('getProps Error:', e);
+                }
+            }
+
             res.setHeader('Content-Type', 'text/html');
             const stream = renderPageStream(
                 PageComponent,
-                { params },
+                initialProps,
                 pathname,
-                { routes: ROUTE_MAP, app } // We pass ROUTE_MAP so client knows about file routes.
-                // Dynamic routes might need to be passed to client too if we want client-side nav to them?
-                // Yes, otherwise Router won't know about /font.
+                { routes: ROUTE_MAP, app, initialProps } // Pass initialProps to injection context
             );
 
             // To fix client-side routing for dynamic routes:

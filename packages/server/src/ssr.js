@@ -118,6 +118,9 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
         if (injections.routes) {
             scripts += `<script>window.__ROUTES__ = ${JSON.stringify(injections.routes)};</script>`;
         }
+        if (injections.initialProps) {
+            scripts += `<script>window.__INITIAL_PROPS__ = ${JSON.stringify(injections.initialProps)};</script>`;
+        }
 
         // Chunk 1: Head (Push Immediately for TTFB)
         yield `<!DOCTYPE html>
