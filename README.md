@@ -1,54 +1,38 @@
-# Zhinnx (v2)
+# ZhinNX Monorepo
 
-**The Modern, Zero-Config, SEO-First Web Framework.**
+## 🚨 Deployment Architecture (READ THIS)
 
-Zhinnx is built for developers who want the power of React/Next.js but the simplicity of vanilla JS. No build steps required. Just write code and run.
+**The official website source is located in `site/`.**
 
-![Zhinnx Logo](/site/zhinnx_nobg.png)
+The root `src/` directory has been removed to prevent confusion. Vercel deployment is configured via `vercel.json` to route traffic to `site/api/index.js` and serve assets from `site/`.
 
-## Features
+### Deployment Instructions
 
-- ⚡ **Zero-Install Mode:** Use via CDN or npm.
-- 🚀 **Streaming SSR:** Blazing fast Time-To-First-Byte.
-- 🕸 **SEO Optimized:** Automatic meta tags and OpenGraph injection.
-- 🦎 **Fine-Grained Reactivity:** Proxy-based state management.
-- 📂 **File-Based Routing:** `src/pages` determines your routes.
+1. **Vercel:**
+   - The repository root `vercel.json` handles rewrites.
+   - Do **NOT** set `site` as the Root Directory in Vercel Project Settings (unless you want to break monorepo hoisting). Keep Root Directory as `.`.
+   - The `vercel.json` ensures functions and static files are served from `site`.
 
-## Quick Start
+2. **Node.js / VPS:**
+   - `cd site`
+   - `npm install`
+   - `node server.js`
 
-### Create a new project
+### Directory Structure
+
+- `packages/`: Core libraries (`@zhinnx/core`, `@zhinnx/server`, etc.)
+- `site/`: The official ZhinNX website (Documentation, Landing Page, Demos).
+- `examples/`: Sample projects.
+- `api/`: **DEPRECATED** (Use `site/api/` for website logic).
+
+## Development
+
+To run the website locally:
 
 ```bash
-npx zhinnx create my-app
-cd my-app
+cd site
 npm install
+npm run dev
+# or
 node server.js
 ```
-
-### Manual Setup
-
-1. Install:
-   ```bash
-   npm install @zhinnx/core @zhinnx/server
-   ```
-2. Create `server.js`:
-   ```javascript
-   import { handleRequest } from '@zhinnx/server';
-   import http from 'http';
-   http.createServer(handleRequest).listen(3000);
-   ```
-3. Create `src/pages/index.js`:
-   ```javascript
-   import { Component, html } from '@zhinnx/core';
-   export default class Page extends Component {
-     render() { return html`<h1>Hello World</h1>`; }
-   }
-   ```
-
-## Documentation
-
-See the [Official Website](http://localhost:3000/docs) or [ZHINNX_ARCHITECTURE.md](./ZHINNX_ARCHITECTURE.md) for deep dive.
-
-## License
-
-MIT

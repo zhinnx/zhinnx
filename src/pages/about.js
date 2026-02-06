@@ -1,50 +1,22 @@
-import { Component, html } from '../../packages/core/index.js';
-import { Header } from '../components/Header.js';
-import api from '../../packages/core/index.js';
+import { Component, html } from '../../zhinnx.js';
 
-export class About extends Component {
-  constructor() {
-    super();
-    this.state = {
-      apiMessage: 'Loading data from backend...',
-      timestamp: null
-    };
-  }
-
-  async onMount() {
-    // Simulate API call
-    try {
-      const data = await api.get('/api/hello');
-      this.setState({
-        apiMessage: data.message,
-        timestamp: data.timestamp
-      });
-    } catch (err) {
-      this.setState({ apiMessage: 'Failed to connect to API.' });
+export default class AboutPage extends Component {
+    static meta = {
+        title: 'About - Zhinnx',
+        description: 'About us page.'
     }
-  }
 
-  render() {
-    return html`
-      <div id="header-slot"></div>
-      <main class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">About zhinnx</h1>
-
-        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6">
-            <h3 class="font-bold text-indigo-700">Backend Integration Test</h3>
-            <p class="text-gray-700">Message: <span class="font-mono bg-white px-1 rounded">${this.state.apiMessage}</span></p>
-            ${this.state.timestamp ? html`<p class="text-xs text-gray-500 mt-1">Server Time: ${this.state.timestamp}</p>` : ''}
-        </div>
-
-        <p class="text-gray-700 leading-relaxed max-w-2xl">
-            zhinnx is designed to bridge the gap between simple static sites and complex single-page applications.
-            It offers a familiar component model without the massive overhead of larger frameworks.
-        </p>
-      </main>
-    `;
-  }
-
-  afterRender() {
-    new Header().mount(this.$('#header-slot'));
-  }
+    render() {
+        return html`
+            <div class="p-10 max-w-2xl mx-auto">
+                <h1 class="text-3xl font-bold mb-4">About Us</h1>
+                <p class="text-gray-700">
+                    Zhinnx is built for performance and simplicity.
+                </p>
+                <div class="mt-8">
+                     <a href="/" class="text-blue-500 underline">Back Home</a>
+                </div>
+            </div>
+        `;
+    }
 }

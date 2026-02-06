@@ -1,6 +1,6 @@
 {
   "name": "@zhinnx/server",
-  "version": "2.1.0",
+  "version": "2.1.5",
   "description": "Server logic for zhinnx framework",
   "type": "module",
   "main": "./index.js",

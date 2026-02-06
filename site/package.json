@@ -1,10 +1,1 @@
-{
-  "name": "zhinnx-site",
-  "version": "2.1.0",
-  "type": "module",
-  "private": true,
-  "dependencies": {
-    "@zhinnx/core": "file:../../packages/core",
-    "@zhinnx/server": "file:../../packages/server"
-  }
-}
+{"name":"zhinnx-site","version":"2.1.5","type":"module"}

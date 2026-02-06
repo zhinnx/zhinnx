@@ -1,11 +1,12 @@
 {
   "name": "@zhinnx/font",
-  "version": "2.1.0",
+  "version": "2.1.5",
   "description": "Font engine and plugin for ZhinNX",
   "type": "module",
   "main": "./index.js",
-  "bin": {
-    "zhinnx-font": "./bin/zhinnx-font.js"
+  "dependencies": {
+    "opentype.js": "^1.3.4",
+    "@zhinnx/core": "^2.1.5"
   },
   "exports": {
     ".": "./index.js"

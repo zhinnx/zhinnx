@@ -1,0 +1,7 @@
+.zn-card {
+  border: var(--zn-border);
+  background: var(--zn-secondary);
+  padding: 1.5rem;
+  box-shadow: var(--zn-shadow);
+  margin-bottom: 1rem;
+}

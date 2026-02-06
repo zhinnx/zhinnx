@@ -8,7 +8,7 @@ export class ZhinNXApp {
         this.onMountCallbacks = [];
         this.router = null;
 
-        // Run plugins
+        // Run plugins setup hook
         for (const plugin of this.plugins) {
             if (plugin && typeof plugin.setup === 'function') {
                 plugin.setup(this);
@@ -46,6 +46,18 @@ export class ZhinNXApp {
             };
         }
 
+        // Run client plugins
+        // We do this before router init so plugins can potentially intercept or configure
+        for (const plugin of this.plugins) {
+            if (plugin && typeof plugin.client === 'function') {
+                plugin.client({
+                    app: this,
+                    routes: clientRoutes,
+                    window: window
+                });
+            }
+        }
+
         const root = document.querySelector(selector);
         if (root) {
             this.router = new Router(clientRoutes, root);
@@ -59,4 +71,8 @@ export class ZhinNXApp {
 
 export function defineApp(config) {
     return new ZhinNXApp(config);
+}
+
+export function definePlugin(options) {
+    return options;
 }

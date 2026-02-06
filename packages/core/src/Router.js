@@ -9,12 +9,24 @@ export class Router {
    * @param {HTMLElement} rootElement - The DOM element to render pages into.
    */
   constructor(routeMap, rootElement) {
+    // 1. Client Bootstrap Lock
+    if (window.__ZHINNX_BOOTSTRAPPED__) {
+        console.warn('ZhinNX Router already initialized. Skipping second bootstrap.');
+        return;
+    }
+    window.__ZHINNX_BOOTSTRAPPED__ = true;
+
     this.routeMap = routeMap || {};
     this.root = rootElement;
     this.hydrated = false;
 
     // Use History API for standard routing
-    window.addEventListener('popstate', () => this.resolve());
+    window.addEventListener('popstate', () => {
+        // Only resolve if path changed to prevent redundant re-renders
+        if (window.location.pathname !== this.currentPath) {
+            this.resolve();
+        }
+    });
 
     // Initial load - if DOM already loaded (scripts at end of body), resolve immediately
     if (document.readyState === 'loading') {
@@ -29,6 +41,7 @@ export class Router {
    */
   resolve() {
     const path = window.location.pathname || '/';
+    this.currentPath = path;
 
     // Find matching route using Regex
     let matchedRoute = null;
@@ -61,10 +74,22 @@ export class Router {
           }
 
           // Instantiate and mount the page component with Params
-          const page = new ComponentClass({ params });
+          let props = { params };
+
+          // Hydrate Initial Props (Server Data Injection)
+          if (shouldHydrate && window.__INITIAL_PROPS__) {
+              props = { ...props, ...window.__INITIAL_PROPS__ };
+              // Consume them so they don't persist to other routes unexpectedly
+              // (Though current logic reloads for Docs, so it's fine)
+              window.__INITIAL_PROPS__ = null;
+          }
+
+          const page = new ComponentClass(props);
           page.mount(this.root);
 
           this.hydrated = true;
+          // 2. Hydration Completion Flag
+          window.__ZHINNX_HYDRATED__ = true;
       };
 
       // Check if we have the module loaded (client-side mapping)
@@ -85,7 +110,14 @@ export class Router {
               handleComponent(Comp);
            }).catch(err => {
               console.error('Route Loading Error', err);
-              this.root.innerHTML = '<h1>Error Loading Page</h1>';
+              // Graceful Degradation: If we have SSR content, do not destroy it.
+              // This satisfies "Error page must be FINAL... not react to async state changes after successful render"
+              // by prioritizing the successful SSR render over a failed client hydration.
+              if (!this.root.hasChildNodes()) {
+                 this.root.innerHTML = '<h1>Error Loading Page</h1>';
+              } else {
+                 console.warn('Hydration failed. Preserving SSR content.');
+              }
            });
       } else {
           // Fallback or Error

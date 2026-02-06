@@ -1,0 +1,14 @@
+.zn-input {
+  border: var(--zn-border);
+  padding: 0.75rem;
+  width: 100%;
+  font-family: var(--zn-font);
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 2px 2px 0px 0px #000000;
+  background: #fff;
+}
+.zn-input:focus {
+  box-shadow: 4px 4px 0px 0px #000000;
+  background: #fafafa;
+}

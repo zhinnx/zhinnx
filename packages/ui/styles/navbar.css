@@ -1,0 +1,20 @@
+.zn-navbar {
+  border-bottom: var(--zn-border);
+  padding: 1rem 2rem;
+  background: var(--zn-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.zn-navbar-brand {
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: var(--zn-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

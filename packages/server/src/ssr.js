@@ -118,6 +118,9 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
         if (injections.routes) {
             scripts += `<script>window.__ROUTES__ = ${JSON.stringify(injections.routes)};</script>`;
         }
+        if (injections.initialProps) {
+            scripts += `<script>window.__INITIAL_PROPS__ = ${JSON.stringify(injections.initialProps)};</script>`;
+        }
 
         // Chunk 1: Head (Push Immediately for TTFB)
         yield `<!DOCTYPE html>
@@ -131,7 +134,10 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     {
         "imports": {
             "@zhinnx/core": "/node_modules/@zhinnx/core/index.js",
-            "@zhinnx/server": "/node_modules/@zhinnx/server/index.js"
+            "@zhinnx/server": "/node_modules/@zhinnx/server/index.js",
+            "@zhinnx/font": "/node_modules/@zhinnx/font/index.js",
+            "@zhinnx/ui": "/node_modules/@zhinnx/ui/index.js",
+            "@zhinnx/ytdl": "/node_modules/@zhinnx/ytdl/index.js"
         }
     }
     </script>
@@ -168,6 +174,11 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
             font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
+            text-rendering: optimizeSpeed; /* Performance: Prioritize speed over legibility */
+        }
+        /* Performance: GPU Acceleration for smoother animations */
+        .comic-shadow, .comic-shadow-sm, .comic-shadow-hover {
+            will-change: transform, box-shadow;
         }
         .comic-border { border: 2px solid #000000; }
         .comic-border-t { border-top: 2px solid #000000; }

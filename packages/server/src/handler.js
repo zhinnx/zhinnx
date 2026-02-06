@@ -15,6 +15,9 @@ const MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
     '.svg': 'image/svg+xml',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf'
 };
 
 // --- File-Based Routing Logic ---
@@ -117,6 +120,11 @@ export async function handleRequest(req, res) {
             }
         }
 
+        // Allow serving from node_modules for imports (mapped via importmap)
+        if (pathname.startsWith('/node_modules/')) {
+            filePath = path.join(ROOT_DIR, safePath);
+        }
+
         fs.readFile(filePath, (err, data) => {
             if (err) {
                 if (err.code === 'ENOENT') {
@@ -136,25 +144,56 @@ export async function handleRequest(req, res) {
     }
 
     // SSR Logic
-    // Try to load app.js for plugins
+    // 1. Load App & Plugins
     const APP_PATH = path.join(ROOT_DIR, 'src', 'app.js');
     let app = null;
+    const dynamicRoutes = {};
+
     if (fs.existsSync(APP_PATH)) {
         try {
-             const mod = await import(path.join(ROOT_DIR, 'src', 'app.js'));
-             if (mod.default && typeof mod.default.mount === 'function') {
+             const mod = await import(APP_PATH);
+             if (mod.default) {
                  app = mod.default;
+
+                 // Run Server Plugins
+                 if (Array.isArray(app.plugins)) {
+                    const ctx = {
+                        req,
+                        res,
+                        router: {
+                            add: (path, component) => {
+                                dynamicRoutes[path] = {
+                                    path: path,
+                                    regex: `^${path}$`,
+                                    params: [],
+                                    component: component
+                                };
+                            }
+                        },
+                        app: app
+                    };
+
+                    for (const plugin of app.plugins) {
+                        if (typeof plugin.server === 'function') {
+                            await plugin.server(ctx);
+                            if (ctx.handled) return;
+                        }
+                    }
+                 }
              }
         } catch (e) {
              console.error("Failed to load src/app.js", e);
         }
     }
 
-    // Find matching route
+    // 2. Find matching route
     let matchedRoute = null;
     let params = {};
 
-    for (const route of Object.values(ROUTE_MAP)) {
+    // Combine routes: dynamic (plugin) routes take precedence
+    const allRoutes = { ...ROUTE_MAP, ...dynamicRoutes };
+
+    for (const route of Object.values(allRoutes)) {
         const re = new RegExp(route.regex);
         const match = pathname.match(re);
         if (match) {
@@ -168,18 +207,50 @@ export async function handleRequest(req, res) {
 
     if (matchedRoute) {
         try {
-            // Import relative to ROOT_DIR
-            const modulePath = path.join(ROOT_DIR, matchedRoute.importPath);
-            const module = await import(modulePath);
-            const PageComponent = module.default;
+            let PageComponent;
+
+            // Direct component (from plugin) or File import (from routing)
+            if (matchedRoute.component) {
+                PageComponent = matchedRoute.component;
+            } else {
+                // Import relative to ROOT_DIR
+                const modulePath = path.join(ROOT_DIR, matchedRoute.importPath);
+                const module = await import(modulePath);
+                PageComponent = module.default;
+            }
+
+            if (!PageComponent) {
+                throw new Error("Route component not found or default export missing");
+            }
+
+            // Data Fetching: Check for getProps
+            let initialProps = { params };
+            if (PageComponent.getProps) {
+                try {
+                    const data = await PageComponent.getProps({ params, req, res });
+                    if (data) {
+                        initialProps = { ...initialProps, ...data };
+                    }
+                } catch (e) {
+                    console.error('getProps Error:', e);
+                }
+            }
 
             res.setHeader('Content-Type', 'text/html');
             const stream = renderPageStream(
                 PageComponent,
-                { params },
+                initialProps,
                 pathname,
-                { routes: ROUTE_MAP, app }
+                { routes: ROUTE_MAP, app, initialProps } // Pass initialProps to injection context
             );
+
+            // To fix client-side routing for dynamic routes:
+            // renderPageStream injects window.__ROUTES__.
+            // We should pass merged routes?
+            // But dynamic routes contain 'component' class which is not serializable to JSON.
+            // Client needs to know how to load them.
+            // Since plugins run on client too, the client plugin hook `client(ctx)` can add routes to client router.
+            // So we don't need to serialize dynamic routes here.
 
             stream.pipe(res);
 
