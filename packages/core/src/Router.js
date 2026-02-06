@@ -9,12 +9,24 @@ export class Router {
    * @param {HTMLElement} rootElement - The DOM element to render pages into.
    */
   constructor(routeMap, rootElement) {
+    // 1. Client Bootstrap Lock
+    if (window.__ZHINNX_BOOTSTRAPPED__) {
+        console.warn('ZhinNX Router already initialized. Skipping second bootstrap.');
+        return;
+    }
+    window.__ZHINNX_BOOTSTRAPPED__ = true;
+
     this.routeMap = routeMap || {};
     this.root = rootElement;
     this.hydrated = false;
 
     // Use History API for standard routing
-    window.addEventListener('popstate', () => this.resolve());
+    window.addEventListener('popstate', () => {
+        // Only resolve if path changed to prevent redundant re-renders
+        if (window.location.pathname !== this.currentPath) {
+            this.resolve();
+        }
+    });
 
     // Initial load - if DOM already loaded (scripts at end of body), resolve immediately
     if (document.readyState === 'loading') {
@@ -29,6 +41,7 @@ export class Router {
    */
   resolve() {
     const path = window.location.pathname || '/';
+    this.currentPath = path;
 
     // Find matching route using Regex
     let matchedRoute = null;
@@ -75,6 +88,8 @@ export class Router {
           page.mount(this.root);
 
           this.hydrated = true;
+          // 2. Hydration Completion Flag
+          window.__ZHINNX_HYDRATED__ = true;
       };
 
       // Check if we have the module loaded (client-side mapping)

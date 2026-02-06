@@ -52,6 +52,11 @@ export class Component {
 
         this.isMounted = true;
         this.onMount();
+
+        // Ensure hydration flag is set if this is a root mount that didn't go through Router
+        if (shouldHydrate) {
+             window.__ZHINNX_HYDRATED__ = true;
+        }
     }
 
     hydrate() {
