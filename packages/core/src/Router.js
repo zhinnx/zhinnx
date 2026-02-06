@@ -110,7 +110,14 @@ export class Router {
               handleComponent(Comp);
            }).catch(err => {
               console.error('Route Loading Error', err);
-              this.root.innerHTML = '<h1>Error Loading Page</h1>';
+              // Graceful Degradation: If we have SSR content, do not destroy it.
+              // This satisfies "Error page must be FINAL... not react to async state changes after successful render"
+              // by prioritizing the successful SSR render over a failed client hydration.
+              if (!this.root.hasChildNodes()) {
+                 this.root.innerHTML = '<h1>Error Loading Page</h1>';
+              } else {
+                 console.warn('Hydration failed. Preserving SSR content.');
+              }
            });
       } else {
           // Fallback or Error
