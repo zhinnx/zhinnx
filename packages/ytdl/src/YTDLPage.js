@@ -18,21 +18,30 @@ export default class YTDLPage extends Component {
     }
 
     async fetchVideo() {
-        if (!this.state.url) return;
+        // Prevent empty or repeated fetch
+        if (!this.state.url || this.state.loading) return;
+
+        // Preserve URL, reset error/data, set loading
         this.setState({ loading: true, error: null, data: null });
+
         try {
             const data = await useYouTube(this.state.url);
-            this.setState({ loading: false, data });
+            // On success: loading false, set data, preserve URL
+            this.setState({ loading: false, data, error: null });
         } catch (e) {
-            this.setState({ loading: false, error: e.message });
+            // On error: loading false, set error, preserve URL
+            this.setState({ loading: false, error: e.message || 'Failed to fetch video', data: null });
         }
     }
 
     render() {
         const { url, loading, data, error } = this.state;
+        const btnText = loading ? 'FETCHING...' : 'GET VIDEO';
 
         return html`
             <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 font-sans">
+                 <!-- Navbar injection point if needed, but handled by App usually -->
+
                 <div class="max-w-2xl w-full bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] p-6">
                     <h1 class="text-3xl font-bold mb-6 text-center uppercase tracking-tighter">YouTube Downloader</h1>
 
@@ -43,15 +52,22 @@ export default class YTDLPage extends Component {
                             class="border-2 border-black p-3 w-full focus:shadow-[4px_4px_0px_0px_#000] outline-none transition-all"
                             value="${url}"
                             oninput="${(e) => this.setState({ url: e.target.value })}"
+                            disabled="${loading ? 'disabled' : undefined}"
                         />
                         <button
-                            class="bg-black text-white font-bold py-3 px-6 border-2 border-black hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#000] transition-all active:translate-y-[0px] active:shadow-none"
+                            class="bg-black text-white font-bold py-3 px-6 border-2 border-black hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_#000] transition-all active:translate-y-[0px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
                             onclick="${() => this.fetchVideo()}"
-                            ${loading ? 'disabled' : ''}
+                            disabled="${loading ? 'disabled' : undefined}"
                         >
-                            ${loading ? 'FETCHING...' : 'GET VIDEO'}
+                            ${btnText}
                         </button>
                     </div>
+
+                    ${loading ? html`
+                        <div class="mt-8 flex justify-center">
+                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-black"></div>
+                        </div>
+                    ` : ''}
 
                     ${error ? html`<div class="mt-6 p-4 border-2 border-red-500 bg-red-50 text-red-700 font-bold">${error}</div>` : ''}
 

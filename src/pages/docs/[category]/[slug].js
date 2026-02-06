@@ -1,9 +1,5 @@
 import { Component, html } from '@zhinnx/core';
 import { Navbar } from '../../components/Navbar.js';
-import { marked } from 'marked';
-import matter from 'gray-matter';
-import fs from 'fs';
-import path from 'path';
 
 export default class DocsPage extends Component {
     static meta = {
@@ -12,62 +8,123 @@ export default class DocsPage extends Component {
     }
 
     static async getProps({ params }) {
-        const { category, slug } = params;
+        // SSR-Only: We can use dynamic imports for fs/path if needed,
+        // OR simply fetch from our own API to keep logic unified.
+        // For performance in SSR, direct FS access is better.
+        if (typeof window === 'undefined') {
+            try {
+                const fs = await import('fs');
+                const path = await import('path');
+                const matter = (await import('gray-matter')).default;
+                const marked = (await import('marked')).marked;
 
-        const filePath = path.join(process.cwd(), 'src', 'docs', category, `${slug}.md`);
+                const { category, slug } = params;
+                const filePath = path.join(process.cwd(), 'src', 'docs', category, `${slug}.md`);
 
-        if (!fs.existsSync(filePath)) {
-            return { error: 'Document not found' };
-        }
+                if (!fs.existsSync(filePath)) {
+                    return { error: 'Document not found' };
+                }
 
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
-        const { data, content } = matter(fileContent);
-        const htmlContent = marked(content);
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                const { data, content } = matter(fileContent);
+                const htmlContent = marked(content);
 
-        // Build Sidebar Navigation
-        const sidebar = [];
-        const categories = fs.readdirSync(path.join(process.cwd(), 'src', 'docs'));
+                // Build Sidebar
+                const sidebar = [];
+                const docsRoot = path.join(process.cwd(), 'src', 'docs');
+                const categories = fs.readdirSync(docsRoot);
 
-        for (const cat of categories) {
-            const catPath = path.join(process.cwd(), 'src', 'docs', cat);
-            if (fs.statSync(catPath).isDirectory()) {
-                const files = fs.readdirSync(catPath)
-                    .filter(f => f.endsWith('.md'))
-                    .map(f => {
-                         const name = f.replace('.md', '');
-                         return { name, path: `/docs/${cat}/${name}` };
-                    });
-                sidebar.push({ name: cat, items: files });
+                for (const cat of categories) {
+                    const catPath = path.join(docsRoot, cat);
+                    if (fs.statSync(catPath).isDirectory()) {
+                        const files = fs.readdirSync(catPath)
+                            .filter(f => f.endsWith('.md'))
+                            .map(f => {
+                                 const name = f.replace('.md', '');
+                                 return { name, path: `/docs/${cat}/${name}` };
+                            });
+                        sidebar.push({ name: cat, items: files });
+                    }
+                }
+
+                return {
+                    content: htmlContent,
+                    meta: data,
+                    sidebar,
+                    category,
+                    slug
+                };
+            } catch (e) {
+                console.error('Docs SSR Error:', e);
+                return { error: 'Internal Server Error' };
             }
         }
+        return {};
+    }
 
-        return {
-            content: htmlContent,
-            meta: data,
-            sidebar,
-            category,
-            slug
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: !props.content && !props.error,
+            content: props.content,
+            meta: props.meta || {},
+            sidebar: props.sidebar || [],
+            error: props.error
         };
     }
 
-    render() {
-        const { content, meta, sidebar, error } = this.props;
+    async onMount() {
+        // Client-Side Navigation: Fetch content if missing
+        if (!this.state.content && !this.state.error) {
+            const { category, slug } = this.props.params;
+            try {
+                const res = await fetch(`/api/docs?category=${category}&slug=${slug}`);
+                if (!res.ok) throw new Error('Failed to load documentation');
+                const data = await res.json();
+                this.setState({
+                    content: data.content,
+                    meta: data.meta,
+                    sidebar: data.sidebar,
+                    loading: false
+                });
+                // Update Page Title
+                if (data.meta && data.meta.title) {
+                    document.title = data.meta.title;
+                }
+            } catch (e) {
+                this.setState({ loading: false, error: e.message });
+            }
+        }
+    }
 
-        if (error) {
-            return html`
-                <div class="min-h-screen bg-white">
+    render() {
+        const { content, sidebar, error, loading } = this.state;
+        const { category, slug } = this.props.params || {};
+
+        if (loading) {
+             return html`
+                <div class="min-h-screen bg-white font-sans">
                     <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
-                    <div class="max-w-7xl mx-auto px-4 py-20 text-center">
-                        <h1 class="text-4xl font-bold mb-4">404</h1>
-                        <p class="text-xl">${error}</p>
-                        <a href="/docs" class="text-blue-600 underline">Back to Docs</a>
+                    <div class="flex justify-center items-center h-[50vh]">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
                     </div>
                 </div>
             `;
         }
 
-        // Optimization: Lazy load heavy content sections if needed
-        // For now, we utilize 'content-visibility: auto' on large prose block to improve render performance
+        if (error) {
+            return html`
+                <div class="min-h-screen bg-white font-sans">
+                    <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
+                    <div class="max-w-7xl mx-auto px-4 py-20 text-center">
+                        <h1 class="text-4xl font-bold mb-4">404</h1>
+                        <p class="text-xl mb-8">${error}</p>
+                        <a href="/docs" class="bg-black text-white px-6 py-3 font-bold border-2 border-black comic-shadow hover:bg-gray-800">Back to Docs</a>
+                    </div>
+                </div>
+            `;
+        }
+
         return html`
             <div class="min-h-screen bg-white font-sans">
                 <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
@@ -83,7 +140,7 @@ export default class DocsPage extends Component {
                                         <ul class="space-y-2 border-l-2 border-gray-100 pl-4">
                                             ${section.items.map(item => html`
                                                 <li>
-                                                    <a href="${item.path}" class="block text-gray-700 hover:text-black hover:font-bold ${item.path.includes(this.props.slug) ? 'font-bold text-black border-l-4 border-black -ml-[18px] pl-4' : 'transition-colors'}">
+                                                    <a href="${item.path}" class="block text-gray-700 hover:text-black hover:font-bold ${item.path.includes(slug) ? 'font-bold text-black border-l-4 border-black -ml-[18px] pl-4' : 'transition-colors'}">
                                                         ${item.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                                     </a>
                                                 </li>

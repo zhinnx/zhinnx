@@ -20,11 +20,17 @@ export class Navbar extends Component {
     render() {
         const isOpen = this.state.mobileMenuOpen;
         const isStatic = this.props && this.props.static;
-        // Optimization: Use touchstart passive where possible for mobile responsiveness
-        // For simple onclick handlers in template literals, we stick to standard click for now
-        // but ensure handlers are lightweight.
-        const toggle = isStatic ? null : (e) => this.toggleMenu(e);
-        const close = isStatic ? null : () => this.closeMenu();
+
+        // Clean event handlers for template literals
+        // We use function references which template-literal-engine (vdom) should handle.
+        // If isStatic, we pass undefined/null which shouldn't render attributes.
+        const toggle = isStatic ? undefined : (e) => this.toggleMenu(e);
+        const close = isStatic ? undefined : () => this.closeMenu();
+
+        // Hamburger Icon SVG
+        const hamburgerIcon = isOpen
+            ? 'M6 18L18 6M6 6l12 12'
+            : 'M4 6h16M4 12h16M4 18h16';
 
         return html`
             <nav class="sticky top-0 z-50 bg-white border-b-2 border-black font-sans contain-content">
@@ -46,11 +52,11 @@ export class Navbar extends Component {
 
                         <!-- Mobile Menu Button -->
                         <div class="md:hidden">
-                            <button class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none touch-manipulation"
+                            <button class="p-2 border-2 border-black hover:bg-gray-100 focus:outline-none touch-manipulation flex items-center justify-center"
                                     aria-label="Toggle Menu"
                                     onclick="${toggle}">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${hamburgerIcon}" />
                                 </svg>
                             </button>
                         </div>
@@ -58,7 +64,7 @@ export class Navbar extends Component {
                 </div>
 
                 <!-- Mobile Menu Dropdown -->
-                <div class="md:hidden border-t-2 border-black bg-white absolute w-full left-0 z-40 shadow-xl overflow-hidden transition-all duration-300 ease-linear ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}" style="transition-timing-function: steps(5); contain: content;">
+                <div class="md:hidden border-t-2 border-black bg-white absolute w-full left-0 z-40 shadow-xl overflow-hidden transition-all duration-300 ease-linear ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}" style="transition-timing-function: steps(5);">
                     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <a href="/" onclick="${close}" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Home</a>
                         <a href="/plugins" onclick="${close}" class="block px-3 py-2 text-base font-bold text-black hover:bg-gray-50 border-b border-gray-100">Plugins</a>
