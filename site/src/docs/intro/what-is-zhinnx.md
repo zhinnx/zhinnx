@@ -1,30 +1,32 @@
+---
+title: What is ZhinNX?
+description: An introduction to the ZhinNX framework.
+---
+
 # What is ZhinNX?
 
-ZhinNX is a **Zero-Build, SSR-First Web Framework** designed for serious developers who value performance, simplicity, and control.
+**ZhinNX** is a professional, lightweight, and production-ready web framework designed for serious developers who value performance and simplicity.
 
-## The Philosophy
+## Core Philosophy
 
-Modern web development has become overly complex. We have layers upon layers of abstraction: bundlers, transpilers, complex state management libraries, and hydration nightmares.
+1.  **Zero-Build:** ZhinNX uses native ES Modules to serve your code instantly. Change a file, refresh, done. No bundlers required for development.
+2.  **SSR-First:** HTML is streamed from the server immediately, ensuring world-class Time-To-First-Byte (TTFB) and SEO.
+3.  **Plugin-First:** The architecture is built around a powerful plugin system that allows you to extend the framework with custom logic, UI libraries, and more.
 
-ZhinNX takes a different approach. We believe in:
+## Why ZhinNX?
 
-- **Zero Build Step:** Development should be instant. No waiting for Webpack or Vite to bundle your code. ZhinNX uses native ES Modules directly in the browser and Node.js.
-- **SSR First:** Performance matters. We stream HTML from the server to the client, ensuring the fastest possible Time-To-First-Byte (TTFB).
-- **Explicit APIs:** No magic. If you want state, you define it. If you want a route, you see it. We avoid "black box" logic.
-- **Platform Native:** We use standard Web APIs (Custom Elements, ES Modules, Fetch, History API) wherever possible.
+-   **Performance:** Optimized for speed and low overhead.
+-   **Simplicity:** Minimal configuration, explicit API.
+-   **Stability:** Built-in self-healing rendering and robust error handling.
+-   **Modern:** Uses latest web standards (ESM, Proxies, IntersectionObserver).
 
-## Key Features
+## Get Started
 
-- **Streaming SSR:** Send HTML chunks as they are generated.
-- **Component System:** Class-based components with reactive state.
-- **Plugin Architecture:** Extensible core that supports UI libraries, font engines, and more.
-- **File-Based Routing:** `src/pages/about.js` becomes `/about`.
-- **Zero Configuration:** It just works out of the box.
+To create a new project:
 
-## Who is ZhinNX For?
-
-ZhinNX is for developers who:
-- Are tired of "config hell".
-- Want to understand exactly how their framework works.
-- Need raw performance without the bloat.
-- Want to build long-lasting applications using standard web technologies.
+\`\`\`bash
+npx @zhinnx/cli create my-app
+cd my-app
+npm install
+npm run dev
+\`\`\`

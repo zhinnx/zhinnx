@@ -42,7 +42,8 @@ export default class YTDLPage extends Component {
             <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 font-sans">
                  <!-- Navbar injection point if needed, but handled by App usually -->
 
-                <div class="max-w-2xl w-full bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] p-6">
+                <div class="max-w-2xl w-full bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] p-6 relative">
+                    <a href="/" class="absolute top-4 right-4 text-sm font-bold underline hover:no-underline">EXIT</a>
                     <h1 class="text-3xl font-bold mb-6 text-center uppercase tracking-tighter">YouTube Downloader</h1>
 
                     <div class="flex flex-col gap-4">
