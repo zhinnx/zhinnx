@@ -4,7 +4,12 @@
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/api/index.js" }
+    { "source": "/packages/(.*)", "destination": "/packages/$1" },
+    { "source": "/node_modules/(.*)", "destination": "/node_modules/$1" },
+    { "source": "/src/(.*)", "destination": "/site/src/$1" },
+    { "source": "/public/(.*)", "destination": "/site/public/$1" },
+    { "source": "/(.*\\..*)", "destination": "/site/$1" },
+    { "source": "/(.*)", "destination": "/site/index.html" }
   ],
   "functions": {
     "api/index.js": {
