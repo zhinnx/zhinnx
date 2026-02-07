@@ -82,27 +82,29 @@ export default class YTDLPage extends Component {
                                 </div>
                             </div>
 
+                            ${data.video && data.video.length > 0 ? html`
                             <div class="mt-6">
                                 <h3 class="font-bold border-b-2 border-black pb-2 mb-4">VIDEO FORMATS</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    ${data.video && data.video.map(v => html`
+                                    ${data.video.map(v => html`
                                         <a href="${v.url}" target="_blank" class="block p-3 border-2 border-black hover:bg-black hover:text-white transition-colors text-center font-medium decoration-none">
                                             ${v.quality || 'Unknown'} (${v.size || 'Stream'})
                                         </a>
                                     `)}
                                 </div>
-                            </div>
+                            </div>` : ''}
 
+                            ${data.audio && data.audio.length > 0 ? html`
                              <div class="mt-6">
                                 <h3 class="font-bold border-b-2 border-black pb-2 mb-4">AUDIO FORMATS</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    ${data.audio && data.audio.map(a => html`
+                                    ${data.audio.map(a => html`
                                         <a href="${a.url}" target="_blank" class="block p-3 border-2 border-black bg-gray-100 hover:bg-black hover:text-white transition-colors text-center font-medium decoration-none">
                                             Audio Only (${a.size || 'Stream'})
                                         </a>
                                     `)}
                                 </div>
-                            </div>
+                            </div>` : ''}
                         </div>
                     ` : ''}
                 </div>
