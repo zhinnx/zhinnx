@@ -33,7 +33,7 @@ export class Navbar extends Component {
             : 'M4 6h16M4 12h16M4 18h16';
 
         return html`
-            <nav class="sticky top-0 z-50 bg-white border-b-2 border-black font-sans contain-content">
+            <nav class="sticky top-0 z-50 bg-white border-b-2 border-black font-sans">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20 items-center">
                         <div class="flex items-center gap-3">

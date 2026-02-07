@@ -1,9 +1,9 @@
 {
   "name": "@zhinnx/ytdl",
-  "version": "2.1.5",
+  "version": "2.2.0",
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@zhinnx/core": "^2.1.5"
+    "@zhinnx/core": "^2.2.0"
   }
 }

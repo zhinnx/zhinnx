@@ -3,6 +3,8 @@
  * specific Simple client-side routing.
  */
 
+import { Config } from './Config.js';
+
 export class Router {
   /**
    * @param {Object} routeMap - Map of routes from server { '/path': { regex, importPath, params } }
@@ -109,15 +111,35 @@ export class Router {
               const Comp = module.default || module;
               handleComponent(Comp);
            }).catch(err => {
-              console.error('Route Loading Error', err);
+              console.error('[ZhinNX] Route Loading Error', err);
+
               // Graceful Degradation: If we have SSR content, do not destroy it.
-              // This satisfies "Error page must be FINAL... not react to async state changes after successful render"
-              // by prioritizing the successful SSR render over a failed client hydration.
-              if (!this.root.hasChildNodes()) {
-                 this.root.innerHTML = '<h1>Error Loading Page</h1>';
-              } else {
-                 console.warn('Hydration failed. Preserving SSR content.');
+              if (this.root.hasChildNodes()) {
+                 console.warn('[ZhinNX] Hydration failed. Preserving SSR content.');
+                 return;
               }
+
+              // Self-Healing Strategy
+              if (Config.get('selfHealing')) {
+                  if (!sessionStorage.getItem('zhinnx_retry')) {
+                      console.log('[ZhinNX] Attempting auto-recovery...');
+                      sessionStorage.setItem('zhinnx_retry', 'true');
+                      window.location.reload();
+                      return;
+                  }
+                  sessionStorage.removeItem('zhinnx_retry');
+              }
+
+              // Recovery UI
+              this.root.innerHTML = `
+                  <div style="font-family: sans-serif; text-align: center; padding: 50px;">
+                      <h2>Something went wrong.</h2>
+                      <p>We couldn't load the page content.</p>
+                      <button onclick="window.location.reload()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; border: 2px solid black; background: white;">
+                          Try Again
+                      </button>
+                  </div>
+              `;
            });
       } else {
           // Fallback or Error
@@ -126,7 +148,13 @@ export class Router {
       }
 
     } else {
-      this.root.innerHTML = '<h1>404 - Page Not Found</h1>';
+      this.root.innerHTML = `
+          <div style="font-family: sans-serif; text-align: center; padding: 50px;">
+              <h1>404</h1>
+              <p>Page Not Found</p>
+              <a href="/" style="color: blue; text-decoration: underline;">Go Home</a>
+          </div>
+      `;
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, html } from '@zhinnx/core';
+import { Component, html, SmartImage } from '@zhinnx/core';
 import { useYouTube } from './api.js';
 
 export default class YTDLPage extends Component {
@@ -74,7 +74,7 @@ export default class YTDLPage extends Component {
                     ${data ? html`
                         <div class="mt-8 border-t-2 border-black pt-6 animate-in fade-in slide-in-from-bottom-4">
                             <div class="flex flex-col md:flex-row gap-6">
-                                <img src="${data.thumbnail}" class="w-full md:w-48 h-auto object-cover border-2 border-black shadow-sm" />
+                                ${new SmartImage({ src: data.thumbnail, class: "w-full md:w-48 h-auto object-cover border-2 border-black shadow-sm", alt: data.title }).render()}
                                 <div>
                                     <h2 class="text-xl font-bold mb-2 leading-tight">${data.title}</h2>
                                     <p class="text-gray-600 font-medium mb-4">Duration: ${data.duration}</p>
