@@ -11,7 +11,8 @@ export default async function handler(req, res) {
     }
 
     try {
-        const filePath = path.join(process.cwd(), 'src', 'docs', category, `${slug}.md`);
+        const ROOT_DIR = process.env.ZHINNX_ROOT ? path.resolve(process.cwd(), process.env.ZHINNX_ROOT) : process.cwd();
+        const filePath = path.join(ROOT_DIR, 'src', 'docs', category, `${slug}.md`);
 
         if (!fs.existsSync(filePath)) {
             return res.status(404).json({ error: 'Document not found' });
@@ -23,7 +24,7 @@ export default async function handler(req, res) {
 
         // Build Sidebar (Simplified for API response)
         const sidebar = [];
-        const docsRoot = path.join(process.cwd(), 'src', 'docs');
+        const docsRoot = path.join(ROOT_DIR, 'src', 'docs');
         if (fs.existsSync(docsRoot)) {
             const categories = fs.readdirSync(docsRoot);
             for (const cat of categories) {

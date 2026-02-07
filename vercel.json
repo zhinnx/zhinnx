@@ -3,11 +3,15 @@
     "ZHINNX_ROOT": "site"
   },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/site/api/index.js" }
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/api/index.js" }
   ],
   "functions": {
-    "site/api/index.js": {
+    "api/index.js": {
       "includeFiles": "site/**, packages/**, public/**, node_modules/**"
+    },
+    "api/docs.js": {
+        "includeFiles": "site/src/docs/**"
     }
   }
 }
