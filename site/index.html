@@ -52,22 +52,12 @@
     <script type="module">
         import * as mod from '/src/app.js';
 
-        // Define routes map for client-side routing if needed
-        // Assuming app.js or Router handles route discovery or uses a static map
-        // For file-based routing without server scan, we might need a manual map or fetch one
-        // But for now, let's just mount the app which should initialize the router.
-
-        // In client-only mode, we need to provide the route map to the router somehow?
-        // The router expects window.__ROUTES__ usually injected by SSR.
-        // If not present, we must fetch it or define it.
-        // Let's try to fetch it from API? Or define a static list of known routes for the demo site.
-
+        // Static Routing Map for ZhinNX v2.2.0 Demo
         const staticRoutes = {
             '/': { regex: '^/$', importPath: './pages/index.js' },
             '/docs': { regex: '^/docs$', importPath: './pages/docs/index.js' },
             '/plugins': { regex: '^/plugins$', importPath: './pages/plugins.js' },
-            '/font': { regex: '^/font$', component: null }, // Handled by plugin
-            '/ytdl': { regex: '^/ytdl$', component: null }  // Handled by plugin
+            // Plugins handle their own routes (font, ytdl) via client hook
         };
 
         // Add dynamic docs route
