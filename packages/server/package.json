@@ -1,6 +1,6 @@
 {
   "name": "@zhinnx/server",
-  "version": "2.1.5",
+  "version": "2.2.0",
   "description": "Server logic for zhinnx framework",
   "type": "module",
   "main": "./index.js",
@@ -13,7 +13,7 @@
   },
 
   "dependencies": {
-    "@zhinnx/core": "^2.1.0"
+    "@zhinnx/core": "^2.2.0"
   },
   "keywords": ["zhinnx", "server", "ssr"],
   "license": "MIT"

@@ -103,12 +103,20 @@ function hydrateNode(vnode, domNode) {
     }
 
     // Patch Props
+    let shouldPreserve = false;
     if (vnode.props) {
+        if (vnode.props['z-preserve'] || vnode.props['preserve']) {
+            shouldPreserve = true;
+        }
         for (const key in vnode.props) {
             if (key.startsWith('on')) {
                 patchProp(domNode, key, null, vnode.props[key]);
             }
         }
+    }
+
+    if (shouldPreserve) {
+        return domNode.nextSibling;
     }
 
     // Hydrate Children
@@ -171,7 +179,9 @@ export function patch(n1, n2, container) {
     }
 
     // Patch Children
-    diffChildren(n1.children, n2.children, el);
+    if (!newProps['z-preserve'] && !newProps['preserve']) {
+        diffChildren(n1.children, n2.children, el);
+    }
 }
 
 export function diffChildren(oldChildren, newChildren, container) {

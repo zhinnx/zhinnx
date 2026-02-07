@@ -1,10 +1,13 @@
 {
+  "env": {
+    "ZHINNX_ROOT": "site"
+  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.js" }
+    { "source": "/(.*)", "destination": "/site/api/index.js" }
   ],
   "functions": {
-    "api/index.js": {
-      "includeFiles": "src/**, packages/**, public/**"
+    "site/api/index.js": {
+      "includeFiles": "site/**, packages/**, public/**, node_modules/**"
     }
   }
 }

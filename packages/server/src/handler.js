@@ -5,7 +5,7 @@ import { renderPageStream } from './ssr.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT_DIR = process.cwd();
+const ROOT_DIR = process.env.ZHINNX_ROOT ? path.resolve(process.cwd(), process.env.ZHINNX_ROOT) : process.cwd();
 
 const MIME_TYPES = {
     '.html': 'text/html',
@@ -122,7 +122,9 @@ export async function handleRequest(req, res) {
 
         // Allow serving from node_modules for imports (mapped via importmap)
         if (pathname.startsWith('/node_modules/')) {
-            filePath = path.join(ROOT_DIR, safePath);
+            // Serve node_modules from project root (process.cwd()), not app root (ROOT_DIR)
+            // This handles monorepo structure where node_modules is at root but app is in site/
+            filePath = path.join(process.cwd(), safePath);
         }
 
         fs.readFile(filePath, (err, data) => {

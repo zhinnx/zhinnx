@@ -1,1 +1,14 @@
-{"name":"zhinnx-site","version":"2.1.5","type":"module"}
+{
+  "name": "zhinnx-site",
+  "version": "2.2.0",
+  "type": "module",
+  "dependencies": {
+    "@zhinnx/core": "file:../packages/core",
+    "@zhinnx/font": "file:../packages/font",
+    "@zhinnx/server": "file:../packages/server",
+    "@zhinnx/ui": "file:../packages/ui",
+    "@zhinnx/ytdl": "file:../packages/ytdl",
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.1"
+  }
+}

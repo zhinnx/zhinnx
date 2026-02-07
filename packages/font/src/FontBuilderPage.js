@@ -36,8 +36,9 @@ export default class FontBuilderPage extends Component {
             <div class="flex h-screen w-full font-sans bg-gray-50 overflow-hidden">
                 <!-- Sidebar -->
                 <div class="w-64 bg-white border-r-2 border-black flex flex-col h-full">
-                    <div class="p-4 border-b-2 border-black bg-black text-white">
+                    <div class="p-4 border-b-2 border-black bg-black text-white flex justify-between items-center">
                         <h1 class="font-bold text-xl">Font Builder</h1>
+                        <a href="/" class="text-white hover:text-gray-300 font-bold text-sm">EXIT</a>
                     </div>
                     <div class="flex-1 overflow-y-auto p-2 grid grid-cols-4 gap-2 content-start">
                         ${this.chars.map(char => html`

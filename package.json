@@ -1,6 +1,6 @@
 {
   "name": "zhinnx-monorepo",
-  "version": "2.1.5",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "workspaces": [
