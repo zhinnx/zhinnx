@@ -3,6 +3,7 @@
  * zhinnx Lazy Hydration Wrapper
  */
 import { Component, html } from './Component.js';
+import { Config } from './Config.js';
 
 export class Lazy extends Component {
     constructor(props) {
@@ -27,6 +28,11 @@ export class Lazy extends Component {
     }
 
     onMount() {
+        if (!Config.get('chunkRender')) {
+            this.loadComponent();
+            return;
+        }
+
         // Use IntersectionObserver to detect visibility
         if ('IntersectionObserver' in window) {
             this.observer = new IntersectionObserver((entries) => {

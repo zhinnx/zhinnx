@@ -19,7 +19,9 @@ export default class DocsPage extends Component {
                 const marked = (await import('marked')).marked;
 
                 const { category, slug } = params;
-                const filePath = path.join(process.cwd(), 'src', 'docs', category, `${slug}.md`);
+                const ROOT_DIR = process.env.ZHINNX_ROOT ? path.resolve(process.cwd(), process.env.ZHINNX_ROOT) : process.cwd();
+
+                const filePath = path.join(ROOT_DIR, 'src', 'docs', category, `${slug}.md`);
 
                 if (!fs.existsSync(filePath)) {
                     return { error: 'Document not found' };
@@ -31,7 +33,7 @@ export default class DocsPage extends Component {
 
                 // Build Sidebar
                 const sidebar = [];
-                const docsRoot = path.join(process.cwd(), 'src', 'docs');
+                const docsRoot = path.join(ROOT_DIR, 'src', 'docs');
                 const categories = fs.readdirSync(docsRoot);
 
                 for (const cat of categories) {
@@ -104,7 +106,7 @@ export default class DocsPage extends Component {
         if (loading) {
              return html`
                 <div class="min-h-screen bg-white font-sans">
-                    <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
+                    <div id="navbar-mount" z-preserve="true">${new Navbar({ static: true }).render()}</div>
                     <div class="flex justify-center items-center h-[50vh]">
                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
                     </div>
@@ -115,7 +117,7 @@ export default class DocsPage extends Component {
         if (error) {
             return html`
                 <div class="min-h-screen bg-white font-sans">
-                    <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
+                    <div id="navbar-mount" z-preserve="true">${new Navbar({ static: true }).render()}</div>
                     <div class="max-w-7xl mx-auto px-4 py-20 text-center">
                         <h1 class="text-4xl font-bold mb-4">404</h1>
                         <p class="text-xl mb-8">${error}</p>
@@ -127,7 +129,7 @@ export default class DocsPage extends Component {
 
         return html`
             <div class="min-h-screen bg-white font-sans">
-                <div id="navbar-mount">${new Navbar({ static: true }).render()}</div>
+                <div id="navbar-mount" z-preserve="true">${new Navbar({ static: true }).render()}</div>
 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col md:flex-row py-10 gap-10">

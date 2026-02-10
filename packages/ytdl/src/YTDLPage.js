@@ -1,4 +1,4 @@
-import { Component, html } from '@zhinnx/core';
+import { Component, html, SmartImage } from '@zhinnx/core';
 import { useYouTube } from './api.js';
 
 export default class YTDLPage extends Component {
@@ -42,7 +42,8 @@ export default class YTDLPage extends Component {
             <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4 font-sans">
                  <!-- Navbar injection point if needed, but handled by App usually -->
 
-                <div class="max-w-2xl w-full bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] p-6">
+                <div class="max-w-2xl w-full bg-white border-2 border-black shadow-[4px_4px_0px_0px_#000] p-6 relative">
+                    <a href="/" class="absolute top-4 right-4 text-sm font-bold underline hover:no-underline">EXIT</a>
                     <h1 class="text-3xl font-bold mb-6 text-center uppercase tracking-tighter">YouTube Downloader</h1>
 
                     <div class="flex flex-col gap-4">
@@ -74,34 +75,36 @@ export default class YTDLPage extends Component {
                     ${data ? html`
                         <div class="mt-8 border-t-2 border-black pt-6 animate-in fade-in slide-in-from-bottom-4">
                             <div class="flex flex-col md:flex-row gap-6">
-                                <img src="${data.thumbnail}" class="w-full md:w-48 h-auto object-cover border-2 border-black shadow-sm" />
+                                ${new SmartImage({ src: data.thumbnail, class: "w-full md:w-48 h-auto object-cover border-2 border-black shadow-sm", alt: data.title }).render()}
                                 <div>
                                     <h2 class="text-xl font-bold mb-2 leading-tight">${data.title}</h2>
                                     <p class="text-gray-600 font-medium mb-4">Duration: ${data.duration}</p>
                                 </div>
                             </div>
 
+                            ${data.video && data.video.length > 0 ? html`
                             <div class="mt-6">
                                 <h3 class="font-bold border-b-2 border-black pb-2 mb-4">VIDEO FORMATS</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    ${data.video && data.video.map(v => html`
+                                    ${data.video.map(v => html`
                                         <a href="${v.url}" target="_blank" class="block p-3 border-2 border-black hover:bg-black hover:text-white transition-colors text-center font-medium decoration-none">
                                             ${v.quality || 'Unknown'} (${v.size || 'Stream'})
                                         </a>
                                     `)}
                                 </div>
-                            </div>
+                            </div>` : ''}
 
+                            ${data.audio && data.audio.length > 0 ? html`
                              <div class="mt-6">
                                 <h3 class="font-bold border-b-2 border-black pb-2 mb-4">AUDIO FORMATS</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    ${data.audio && data.audio.map(a => html`
+                                    ${data.audio.map(a => html`
                                         <a href="${a.url}" target="_blank" class="block p-3 border-2 border-black bg-gray-100 hover:bg-black hover:text-white transition-colors text-center font-medium decoration-none">
                                             Audio Only (${a.size || 'Stream'})
                                         </a>
                                     `)}
                                 </div>
-                            </div>
+                            </div>` : ''}
                         </div>
                     ` : ''}
                 </div>

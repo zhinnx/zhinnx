@@ -12,7 +12,7 @@ export default class LandingPage extends Component {
         return html`
             <div class="min-h-screen bg-white text-black overflow-x-hidden font-sans">
                 <!-- Navbar Mount Point -->
-                <div id="navbar-mount">
+                <div id="navbar-mount" z-preserve="true">
                     ${new Navbar({ static: true }).render()}
                 </div>
 

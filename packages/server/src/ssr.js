@@ -115,6 +115,20 @@ export function renderPageStream(PageComponent, props = {}, url = '/', injection
     const iterator = (async function* () {
         // Handle Injections (e.g. __ROUTES__)
         let scripts = '';
+
+        // Inject Runtime Config
+        try {
+            const fs = await import('fs');
+            const path = await import('path');
+            const configPath = path.join(process.cwd(), 'zhinnx.config.json');
+            if (fs.existsSync(configPath)) {
+                const configContent = fs.readFileSync(configPath, 'utf-8');
+                scripts += `<script>window.__ZHINNX_CONFIG__ = ${configContent};</script>`;
+            }
+        } catch (e) {
+            // Config file missing or invalid, ignore
+        }
+
         if (injections.routes) {
             scripts += `<script>window.__ROUTES__ = ${JSON.stringify(injections.routes)};</script>`;
         }

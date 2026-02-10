@@ -7,3 +7,5 @@ export * from './src/Router.js';
 export * from './src/Store.js';
 export * from './src/API.js';
 export * from './src/App.js';
+export * from './src/Config.js';
+export * from './src/SmartImage.js';

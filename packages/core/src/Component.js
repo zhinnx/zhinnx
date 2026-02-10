@@ -5,7 +5,8 @@
 
 import { reactive, effect } from './reactive.js';
 import { html } from './vdom.js';
-import { diffChildren, unmount, hydrate } from './diff.js';
+import { diffChildren, unmount, hydrate as vdomHydrate } from './diff.js';
+import { Config } from './Config.js';
 
 export { html };
 
@@ -61,11 +62,37 @@ export class Component {
 
     hydrate() {
         if (!this._container) return;
-        const rendered = this.render();
+
+        let rendered;
+        try {
+            rendered = this.render();
+        } catch (e) {
+            if (Config.get('selfHealing')) {
+                console.error('[ZhinNX] Self-Healing: Hydration error caught', e);
+                // On hydration error, we might want to blow away SSR and render fresh fallback
+                // But for now, simple fallback VNode
+                rendered = html`<div class="zhinnx-recovery">Recovery Mode</div>`;
+            } else {
+                throw e;
+            }
+        }
+
         const newVNodes = Array.isArray(rendered) ? rendered : [rendered];
 
         // Hydrate logic in diff.js
-        hydrate(newVNodes, this._container);
+        try {
+            vdomHydrate(newVNodes, this._container);
+        } catch (e) {
+            if (Config.get('selfHealing')) {
+                 console.error('[ZhinNX] Self-Healing: DOM mismatch caught', e);
+                 // Fallback: Clear and Mount
+                 this._container.innerHTML = '';
+                 // We call diffChildren with empty oldNodes to force mount
+                 diffChildren([], newVNodes, this._container);
+            } else {
+                throw e;
+            }
+        }
 
         this._vnodes = newVNodes;
         this.afterRender();
@@ -77,17 +104,51 @@ export class Component {
     update() {
         if (!this._container) return;
 
-        const rendered = this.render();
-        // Normalize to array to support Fragments (multiple root nodes)
-        const newVNodes = Array.isArray(rendered) ? rendered : [rendered];
+        let rendered;
+        try {
+            rendered = this.render();
+        } catch (e) {
+            if (Config.get('selfHealing')) {
+                console.error('[ZhinNX] Self-Healing: Render error caught', e);
+                rendered = html`<div class="zhinnx-recovery">Content Unavailable</div>`;
+            } else {
+                throw e;
+            }
+        }
 
-        // Use diffChildren to reconcile the container's content
-        diffChildren(this._vnodes, newVNodes, this._container);
+        const commit = () => {
+             // Normalize to array to support Fragments (multiple root nodes)
+             const newVNodes = Array.isArray(rendered) ? rendered : [rendered];
 
-        this._vnodes = newVNodes;
+             // Use diffChildren to reconcile the container's content
+             try {
+                diffChildren(this._vnodes, newVNodes, this._container);
+             } catch (e) {
+                if (Config.get('selfHealing')) {
+                     console.error('[ZhinNX] Self-Healing: Diff error caught', e);
+                     // Hard Reset
+                     this._container.innerHTML = '';
+                     diffChildren([], newVNodes, this._container);
+                } else {
+                    throw e;
+                }
+             }
 
-        // Lifecycle
-        this.afterRender();
+             this._vnodes = newVNodes;
+
+             // Lifecycle
+             this.afterRender();
+        };
+
+        if (Config.get('priorityRender') && this.props.priority === 'deferred') {
+             if (typeof window !== 'undefined' && window.requestIdleCallback) {
+                 window.requestIdleCallback(commit);
+             } else {
+                 setTimeout(commit, 0);
+             }
+        } else {
+             commit();
+        }
     }
 
     unmount() {
